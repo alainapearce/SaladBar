@@ -1,0 +1,301 @@
+---
+title: "Salad Bar Study: Christina - Time to Eat and Fruit and Vegetable Intake"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+header-includes:
+- \usepackage{fullpage}
+- \usepackage{graphicx}
+- \usepackage{subcaption}
+- \usepackage{float}
+- \usepackage{placeins}
+- \usepackage{caption}
+- \usepackage{mathtools}
+# - \usepackage{multirow}
+- \usepackage{amssymb}
+- \usepackage{amsmath}
+- \usepackage{bigstrut}
+- \usepackage{geometry}
+# - \usepackage{pdflscape}
+- \setlength{\parskip}{1em}
+geometry: margin=1.3cm
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(tidy = TRUE, tidy.opts = list(comment = FALSE), echo = TRUE, fig.width=6, fig.height=4, fig.path='figs/', fig.pos='H', echo=FALSE, cache = FALSE, warning=FALSE, message=FALSE, comment = NA)
+```
+
+<!-- load startup file and any extra packages -->
+```{r load, echo=FALSE, include=FALSE}
+library(knitr)
+library(kableExtra)
+library(stats)
+library(haven)
+library(lubridate)
+library(GLMMadaptive)
+library(car)
+library(emmeans)
+
+library(gtsummary)
+theme_gtsummary_compact()
+
+```
+
+```{r load_scripts, echo=FALSE, results='asis'}
+source('setup.R')
+source('tte_analyses.R')
+source('tte_tables.R')
+```
+
+\clearpage
+
+# Demographic Characteristics
+*note: restricted to complete data (no missing for time to eat or other intake variables - happy to revisit imputation)
+\
+\FloatBarrier
+```{r demo_tab, echo=FALSE, results='asis'}
+  as_kable_extra(overall_table, caption = 'Demographic Characteristics and Variables of Interest', format = "latex", booktabs = TRUE, longtable = FALSE) %>%
+  kableExtra::kable_styling(latex_options = "HOLD_position",  full_width = FALSE)
+```
+
+\FloatBarrier
+\clearpage
+
+## Follow-up Tests by School Type
+
+\
+\FloatBarrier
+
+### gender
+```{r demo_gender_schooltype, echo=FALSE}
+gender_chi
+```
+
+### age
+```{r demo_age_schooltype, echo=FALSE}
+age_anova
+age_emmeans$contrasts
+```
+
+### race/ethnicity
+```{r demo_raceethnicity_schooltype, echo=FALSE}
+raceethnicity_chi
+```
+
+### free-reduced lunch
+```{r demo_frl_schooltype, echo=FALSE}
+frl_chi
+```
+
+### fruit/veg selected
+```{r demo_fv_select_schooltype, echo=FALSE}
+fv_selected_chi
+```
+
+### fruit/veg amount selected
+```{r demo_fv_g_select_schooltype, echo=FALSE}
+fv_pre_anova
+fv_pre_emmeans$contrasts
+```
+
+### fruit/veg consumed
+```{r demo_fv_consumed_schooltype, echo=FALSE}
+fv_consumed_anova
+fv_consumed_emmeans$contrasts
+```
+
+### fruit/veg waste
+```{r demo_fv_waste_schooltype, echo=FALSE}
+fv_post_anova
+fv_post_emmeans$contrasts
+```
+
+### fruit/veg waste proportion
+*restricted to selected only
+\
+\FloatBarrier
+```{r demo_fv_prop_waste_schooltype, echo=FALSE}
+fv_prop_waste_anova
+fv_prop_waste_emmeans$contrasts
+```
+
+\FloatBarrier
+\clearpage
+
+# Fruit/Vegetable Selected
+
+
+```{r fv_pre_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 4}
+hist(salad_bar_dat[salad_bar_dat[['fv_exclude']] == 'N', 'fv_pre'], main = 'Histogram of Selected Fruits/Vegetables, g', xlab = 'Fruit/Vegetables, g')
+```
+
+\
+Total Sample Sizes: Full N = 2226, Elementary N = 630, Middle School N = 699, High School N = 897
+
+\
+\FloatBarrier
+
+```{r fv_pre_mod, echo=FALSE, results='asis'}
+kable(round(fv_served, digits = 3), "latex",  digits = 3, caption = 'Fruit/Veg Selected - Count Model', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+
+\
+
+Elementary Schools - Mean selected = 130.76 g (not including zeros). Each 10 more minutes spent eating (i.e., time to eat) is associated with a 5% increase in grams of F/V selected relative to mean (for those that chose F/V) - over 1 week this equates to 32 g increase of F/V selected
+
+Overall Model, Middle and Hight Schools - Time to Eat is non-significant for grams of F/V selected (for those that chose F/V)
+
+\
+```{r fv_pre_mod_zi, echo=FALSE, results='asis'}
+kable(round(fv_served_z, digits = 3), "latex",  digits = 3, caption = 'Fruit/Veg Selected - Zero Model', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+\
+Overall Model and High Schools - For each minute less time children spent eating, there was a 4% (overall model) and 8% (high school) decrease in odds of NOT selecting F/V (i.e., longer time spent eating -> greater chance of selecting F/V)
+
+
+Elementary and Middle Schools - The odds of choosing NO F/V is not significantly associated with time to eat
+
+\
+\FloatBarrier
+\clearpage
+
+# Fruit/Vegetable Consumed
+
+```{r fv_consumed_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 4}
+hist(salad_bar_dat[salad_bar_dat[['fv_exclude']] == 'N', 'fv_consumed'], main = 'Histogram of Consumed Fruits/Vegetables, g', xlab = 'Fruit/Vegetables, g')
+```
+
+\FloatBarrier
+
+\
+Total Sample Sizes: Full N = 2226, Elementary N = 630, Middle School N = 699, High School N = 897
+\
+
+```{r fv_consumed_mod, echo=FALSE, results='asis'}
+kable(round(fv_consumed, digits = 3), "latex",  digits = 3, caption = 'Fruit/Veg Consumed - Count Model', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\
+Overall Model: mean consumed = 50.85 g, Each 10 more minutes spent eating (i.e., time to eat) is associated with a 13% increase in grams of F/V consumed relative to mean (for those that chose F/V) - over 1 week this equates to 33 g increase of F/V consumed
+\
+
+Elementary: mean consumed = 47.07 g, Each 10 more minutes spent eating (i.e., time to eat) is associated with a 16% increase in grams of F/V consumed relative to mean (for those that chose F/V) - over 1 week this equates to 37.5 g increase of F/V consumed
+\
+
+High Schools: mean consumed = 47.40 g, Each 10 more minutes spent eating (i.e., time to eat) is associated with a 8% increase in grams of F/V consumed relative to mean (for those that chose F/V) - over 1 week this equates to 19 g increase of F/V consumed
+\
+
+Middle Schools - Time to Eat is non-significant for grams of F/V consumed (for those that selected some F/V)
+
+\
+
+```{r fv_consumed_mod_zi, echo=FALSE, results='asis'}
+kable(round(fv_consumed_z, digits = 3), "latex",  digits = 3, caption = 'Fruit/Veg Consumed - Zero Model', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+\
+High Schools - For each minute longer of time to eat, there is 5% (overall model) and 8% (high school) lower odds of consuming NO F/V
+
+Overall Model, Elementary, and Middle Schools - The odds of consuming NO F/V is not significantly associated with time to eat
+
+\
+\FloatBarrier
+\clearpage
+
+# Fruit/Vegetable Waste
+
+```{r fv_waste_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 4}
+hist(salad_bar_dat[salad_bar_dat[['fv_exclude']] == 'N', 'fv_post'], main = 'Histogram of Fruit/Vegetable Waste, g', xlab = 'Fruit/Vegetables, g')
+```
+
+\
+Total Sample Sizes: Full N = 2226, Elementary N = 630, Middle School N = 699, High School N = 897
+
+\
+\FloatBarrier
+
+```{r fv_waste_mod, echo=FALSE, results='asis'}
+kable(round(fv_waste, digits = 3), "latex",  digits = 3, caption = 'Fruit/Veg Waste - Count Model', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\
+
+Overall Model, Elementary, Middle, and High Schools - For those that chose some F/V, time to eat is non-significant for grams of F/V wasted
+\
+
+
+```{r fv_waste_mod_zi, echo=FALSE, results='asis'}
+kable(round(fv_waste_z, digits = 3), "latex",  digits = 3, caption = 'Fruit/Veg Waste - Zero Model', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\
+
+Overall Model, Elementary, Middle, and High Schools - The odds of wasting NO F/V is not significantly associated with time to eat
+
+\
+\FloatBarrier
+\clearpage
+
+# Fruit/Vegetable Percent Waste
+
+```{r fv_prop_waste_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 4}
+hist(salad_bar_dat[salad_bar_dat[['fv_exclude']] == 'N', 'fv_prop_waste'], main = 'Histogram of Percent Fruits/Vegetables Waste, %', xlab = 'Fruit/Vegetables, %')
+```
+
+\
+Total Sample Sizes: Full N = 2226, Elementary N = 630, Middle School N = 699, High School N = 897
+
+\
+\FloatBarrier
+
+```{r fv_prop_waste_mod, echo=FALSE, results='asis'}
+kable(round(fv_prop_waste, digits = 3), "latex",  digits = 3, caption = 'Fruit/Veg Percent Waste - Count Model', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\
+Overall Model: mean percent wasted = 55.11%, Each 10 more minutes spent eating (i.e., time to eat) is associated with a decrease of 6% wasted relative to mean (for those that chose F/V) - over 1 week this equates to a decrease in percent waste of 16.5%.
+\
+
+High Schools: mean percent wasted = 49.61%, Each 10 more minutes spent eating (i.e., time to eat) is associated with a decrease of 14% waste relative to mean (for those that chose F/V) - over 1 week this equates to a decrease in percent waste of 35%.
+\
+
+Elementary, and Middle Schools - Time to eat is non-significant for grams of percent F/V waste (for those that selected F/V)
+
+\
+
+```{r fv_prop_waste_mod_zi, echo=FALSE, results='asis'}
+kable(round(fv_prop_waste_z, digits = 3), "latex",  digits = 3, caption = 'Fruit/Veg Percent Waste - Zero Model', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\
+High Schools - For each minute longer of time to eat, there is 6% greater odds of wasting ZERO percent of F/V selected (for those that selected F/V)
+
+Overall Model, Elementary, and Middle Schools - The odds of wasting ZERO percent F/V is not significantly associated with children's time to eat
+
+\
+
+\FloatBarrier
+\clearpage
+
+# Supplemental Information -- Complete vs Missing Time to Eat ####
+
+## Demographic Characteristics
+
+```{r demo_tab_tte, echo=FALSE, results='asis'}
+  as_kable_extra(overall_table_tte, caption = 'Demographic Characteristics and Variables of Interest', format = "latex", booktabs = TRUE, longtable = FALSE) %>%
+  kableExtra::kable_styling(latex_options = "HOLD_position",  full_width = FALSE)
+```
+
+\FloatBarrier
+\clearpage

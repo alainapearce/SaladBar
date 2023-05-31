@@ -1,0 +1,1067 @@
+---
+title: "Salad Bar Study: Jepson Fruit and Vegetable Paper"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+header-includes:
+- \usepackage{fullpage}
+- \usepackage{graphicx}
+- \usepackage{subcaption}
+- \usepackage{float}
+- \usepackage{placeins}
+- \usepackage{caption}
+- \usepackage{mathtools}
+# - \usepackage{multirow}
+- \usepackage{amssymb}
+- \usepackage{amsmath}
+- \usepackage{bigstrut}
+- \usepackage{geometry}
+# - \usepackage{pdflscape}
+- \setlength{\parskip}{1em}
+geometry: margin=1.3cm
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(tidy = TRUE, tidy.opts = list(comment = FALSE), echo = TRUE, fig.width=6, fig.height=4, fig.path='figs/', fig.pos='H', echo=FALSE, cache = FALSE, warning=FALSE, message=FALSE, comment = NA)
+```
+
+<!-- load startup file and any extra packages -->
+```{r load, echo=FALSE, include=FALSE}
+library(knitr)
+library(kableExtra)
+library(stats)
+library(haven)
+library(psycho)
+library(reshape2)
+library(gtsummary)
+theme_gtsummary_compact()
+
+library(car)
+library(emmeans)
+
+library(lme4)
+library(lmerTest)
+library(rwa)
+library(ggplot2)
+library(ggpubr)
+library(ggsignif)
+
+
+source('functions.R')
+```
+
+```{r load_scripts, echo=FALSE, results='asis'}
+source('setup.R')
+source('jepson_tables.R')
+source('jepson_analyses.R')
+source('jepson_figures.R')
+```
+
+\clearpage
+
+# Demographic Characteristics
+
+```{r demo_tab, echo=FALSE, results='asis'}
+  as_kable_extra(partab_merge, caption = 'Demographic Characteristics', format = "latex", booktabs = TRUE, longtable = FALSE) %>%
+  kableExtra::kable_styling(latex_options = "HOLD_position",  full_width = FALSE)
+```
+
+\FloatBarrier
+\clearpage
+
+## income
+```{r demo_gender, echo=FALSE}
+gender_chi
+```
+
+## age
+```{r demo_age, echo=FALSE}
+age_ttest
+```
+
+## grade
+```{r demo_grade, echo=FALSE}
+grade_ttest
+```
+
+## race
+```{r demo_race, echo=FALSE}
+race_chi
+```
+
+## ethnicity
+```{r demo_ethnicity, echo=FALSE}
+ethnicity_chi
+```
+
+## free-reduced lunch
+```{r demo_frl, echo=FALSE}
+frl_chi
+```
+
+## fruit/veg selected
+```{r demo_fv_select, echo=FALSE}
+fv_selected_chi
+```
+
+# Fruit/Vegetable Intake Table
+
+```{r fv_tab, echo=FALSE, results='asis'}
+  as_kable_extra(fvtab_merge, caption = 'Fruit/Vegetable Intake - for those that took only', format = "latex", booktabs = TRUE, longtable = FALSE) %>%
+  kableExtra::kable_styling(latex_options = "HOLD_position",  full_width = FALSE)
+```
+
+\FloatBarrier
+\clearpage
+
+## fruit/veg amount selected
+```{r demo_fv_g_select, echo=FALSE}
+fv_pre_ttest
+```
+
+## fruit/veg consumed
+```{r demo_fv_consumed, echo=FALSE}
+fv_consumed_ttest
+```
+
+## fruit/veg waste
+```{r demo_fv_waste, echo=FALSE}
+fv_post_ttest
+```
+
+## fruit/veg waste proportion
+```{r demo_fv_prop_waste, echo=FALSE}
+fv_post_prop_ttest
+```
+
+# Fruit/Vegetable Self-Served
+
+```{r fv_pre_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 4}
+hist(salad_bar_dat[salad_bar_dat[['fv_selected']] == 'Y' & salad_bar_dat[['fv_exclude']] == 'N', 'fv_pre'])
+```
+
+\FloatBarrier
+
+```{r fv_pre_mod, echo=FALSE, results='asis'}
+kable(round(gng_fa_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Go-NoGo Percent False Alarms', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\
+
+## Fruit/Vegetable Consumed
+
+```{r fv_consumed_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 4}
+hist(salad_bar_dat[salad_bar_dat[['fv_selected']] == 'Y' & salad_bar_dat[['fv_exclude']] == 'N', 'fv_consumed'])
+```
+
+\FloatBarrier
+
+## Fruit/Vegetable Waste
+
+```{r fv_waste_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 4}
+hist(salad_bar_dat[salad_bar_dat[['fv_selected']] == 'Y' & salad_bar_dat[['fv_exclude']] == 'N', 'fv_post'])
+```
+
+\FloatBarrier
+
+\FloatBarrier
+
+
+\FloatBarrier
+\clearpage
+
+### Percent Hits
+
+```{r gng_hits_risk_mod, echo=FALSE, results='asis'}
+kable(round(gng_hits_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Go-NoGo - Percent Hits', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+
+\FloatBarrier
+
+### Go Reaction Time
+
+```{r gng_hits_rt_mod, echo=FALSE, results='asis'}
+kable(round(gng_rt_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Go-NoGo - Go Reaction Time', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+
+\FloatBarrier
+
+### d'
+
+```{r gng_dprime_risk_mod, echo=FALSE, results='asis'}
+kable(round(gng_dprime_sum$coefficients, digits = 3), "latex",  digits = 3, caption = "Go-NoGo - d'", booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+
+\FloatBarrier
+\clearpage
+
+## Stop-Signal Task
+
+```{r sst_tab, echo=FALSE, results='asis'}
+as_kable_extra(sst_all_tab, caption = 'Stop-Signal Task Performance Summary: Risk Status across all trials', format = "latex", booktabs = TRUE, longtable = FALSE) %>%
+  kableExtra::kable_styling(latex_options = "HOLD_position",  full_width = FALSE)
+```
+\
+\FloatBarrier
+
+
+```{r sstED_tab, echo=FALSE, results='asis'}
+as_kable_extra(sstED_tab, caption = 'Stop-Signal Task Performance Summary: Risk Status by Energy Density Condition', format = "latex", booktabs = TRUE, longtable = FALSE) %>%
+  kableExtra::kable_styling(latex_options = "HOLD_position",  full_width = FALSE)
+```
+\
+\FloatBarrier
+
+```{r sstPS_tab, echo=FALSE, results='asis'}
+as_kable_extra(sstPS_tab, caption = 'Stop-Signal Task Performance Summary: Risk Status by Portion Size Condition', format = "latex", booktabs = TRUE, longtable = FALSE) %>%
+  kableExtra::kable_styling(latex_options = "HOLD_position",  full_width = FALSE)
+```
+
+\
+\FloatBarrier
+\clearpage
+
+### Stop Signal Reaction Time
+
+#### Design
+
+\FloatBarrier
+
+```{r sst_ssrtdesign_mod, echo=FALSE, results='asis'}
+kable(round(sst_ssrtdesign_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSRT - ED x PS', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\
+
+```{r sst_ssrtdesign_fig, echo=FALSE, includ = TRUE, fig.height = 4, fig.width = 6}
+sst_ssrtdesign_plot
+```
+
+
+\clearpage
+
+#### Overall
+
+\FloatBarrier
+
+```{r sst_ssrt_risk_mod, echo=FALSE, results='asis'}
+kable(round(sst_ssrt_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSRT - Risk Status', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\
+
+```{r sst_ssrt_risk_fig, echo=FALSE, includ = TRUE, fig.height = 4, fig.width = 6}
+sst_ssrt_plot
+```
+
+
+```{r sst_ssrt_risk_mod_posthoc}
+emmeans(sst_ssrt_model, specs = pairwise ~ risk_status_mom)
+test(emtrends(sst_ssrt_model, ~age_yr, var = 'age_yr'))
+```
+
+\FloatBarrier
+\clearpage
+
+#### Energy Density Trials
+
+\FloatBarrier
+
+```{r sst_ssrt_risk_EDmod, echo=FALSE, results='asis'}
+kable(round(sst_ssrt_EDsum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSRT - ED x Risk Status', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\
+
+```{r sst_ssrtED_risk_fig, echo=FALSE, includ = TRUE, fig.height = 4, fig.width = 6}
+sst_ssrtED_plot
+```
+
+
+```{r sst_ssrt_risk_EDmod_posthoc}
+emmeans(sst_ssrt_EDmodel, specs = pairwise ~ risk_status_mom)
+emmeans(sst_ssrt_EDmodel, specs = pairwise ~ ED)
+
+```
+\FloatBarrier
+\clearpage
+
+#### Portion Size Trials
+
+\FloatBarrier
+
+```{r sst_ssrt_risk_PSmod, echo=FALSE, results='asis'}
+kable(round(sst_ssrt_PSsum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSRT - PS x Risk Status', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\
+
+```{r sst_ssrtPS_risk_fig, echo=FALSE, includ = TRUE, fig.height = 4, fig.width = 6}
+sst_ssrtPS_plot
+```
+
+
+```{r sst_ssrt_risk_PSmod_posthoc}
+emmeans(sst_ssrt_PSmodel, specs = pairwise ~ risk_status_mom)
+emmeans(sst_ssrt_PSmodel, specs = pairwise ~ PS)
+
+```
+\FloatBarrier
+\clearpage
+
+### Stop Signal Delay
+
+#### Design
+
+\FloatBarrier
+
+```{r sst_ssddesign_mod, echo=FALSE, results='asis'}
+kable(round(sst_ssddesign_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSD - ED x PS', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\
+
+```{r sst_ssddesign_fig, echo=FALSE, includ = TRUE, fig.height = 4, fig.width = 6}
+sst_ssddesign_plot
+```
+
+
+```{r sst_ssddesign_mod_posthoc, echo=FALSE}
+emmeans(sstdesign_ssd_model, specs = pairwise ~ ED)
+```
+
+
+\FloatBarrier
+
+```{r sst_ssddesignED_fig, echo=FALSE, includ = TRUE, fig.height = 4, fig.width = 6}
+sst_ssddesignED_plot
+```
+
+\FloatBarrier
+\clearpage
+
+#### All Trials
+
+
+```{r sst_ssd_risk_mod, echo=FALSE, results='asis'}
+kable(round(sst_ssd_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSD - Risk Status', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\
+
+```{r sst_ssd_risk_fig, echo=FALSE, includ = TRUE, fig.height = 4, fig.width = 6}
+sst_ssd_plot
+```
+
+
+```{r sst_ssd_risk_mod_posthoc, echo=FALSE}
+emmeans(sst_ssd_model, specs = pairwise ~ risk_status_mom)
+```
+
+\FloatBarrier
+\clearpage
+
+#### Energy Density Trials
+
+\FloatBarrier
+
+```{r sst_ssd_risk_EDmod, echo=FALSE, results='asis'}
+kable(round(sst_ssd_EDsum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSD - Risk Status x ED', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\
+
+```{r sst_ssdED_risk_fig, echo=FALSE, includ = TRUE, fig.height = 4, fig.width = 6}
+sst_ssdED_plot
+```
+
+
+```{r sst_ssd_risk_EDmod_posthoc, echo=FALSE}
+emmeans(sst_ssd_EDmodel, specs = pairwise ~ risk_status_mom)
+emmeans(sst_ssd_EDmodel, specs = pairwise ~ ED)
+```
+
+\FloatBarrier
+\clearpage
+
+#### Portion Size Trials
+
+\FloatBarrier
+
+```{r sst_ssd_risk_PSmod, echo=FALSE, results='asis'}
+kable(round(sst_ssd_PSsum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSD - Risk Status x PS', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\
+
+```{r sst_ssdPS_risk_fig, echo=FALSE, includ = TRUE, fig.height = 4, fig.width = 6}
+sst_ssdPS_plot
+```
+
+
+```{r sst_ssd_risk_PSmod_posthoc, echo=FALSE}
+emmeans(sst_ssd_PSmodel, specs = pairwise ~ risk_status_mom)
+emmeans(sst_ssd_PSmodel, specs = pairwise ~ PS)
+emmeans(sst_ssd_PSmodel, specs = pairwise ~ sex)
+```
+
+\FloatBarrier
+\clearpage
+
+## N-back
+
+```{r nback_risk_tab, echo=FALSE, results='asis'}
+as_kable_extra(nbacktab_all, caption = 'Nback Performance Summary',  format = "latex", booktabs = TRUE, longtable = FALSE) %>%
+  kableExtra::kable_styling(latex_options = "HOLD_position",  full_width = FALSE)
+```
+\
+\FloatBarrier
+\clearpage
+
+### Ballanced Accuracy
+
+\FloatBarrier
+
+```{r nback_balacc_risk_mod, echo=FALSE, results='asis'}
+kable(round(nback_balacc_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Nback Balanced Accuracy - Risk Status x Load', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+```{r nback_balacc_risk_fig, echo=FALSE, includ = TRUE, fig.height = 4, fig.width = 6}
+nback_balacc_plot
+```
+
+
+```{r nback_balacc_risk_mod_posthoc, echo=FALSE}
+emmeans(nback_balacc_mod, specs = pairwise ~ block, adjust = 'none')
+emmeans(nback_balacc_mod, specs = pairwise ~ risk_status_mom, adjust = 'none')
+
+emmeans(nback_balacc_mod, specs = pairwise ~ block:risk_status_mom, adjust = 'none')
+```
+
+\FloatBarrier
+\clearpage
+
+### d'
+
+\FloatBarrier
+
+```{r nback_dprime_risk_mod, echo=FALSE, results='asis'}
+kable(round(nback_dprime_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Nback Balanced Accuracy - Risk Status x Load', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+```{r nback_dprime_risk_fig, echo=FALSE, includ = TRUE, fig.height = 4, fig.width = 6}
+nback_drime_plot
+```
+
+
+```{r nback_dprime_risk_mod_posthoc, echo=FALSE}
+emmeans(nback_dprime_mod, specs = pairwise ~ block:risk_status_mom, adjust = 'none')
+emmeans(nback_dprime_mod, specs = pairwise ~ block, adjust = 'none')
+```
+
+\FloatBarrier
+\clearpage
+
+# Effect of Total Body Fat Percentage
+
+## Go-NoGo
+
+### Percent False Alarms
+
+\FloatBarrier
+
+```{r gng_fa_bfp_mod, echo=FALSE, results='asis'}
+kable(round(gng_fa_bfp_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Go-NoGo Percent False Alarms - Body Fat Percentage', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+
+\
+
+```{r gng_fa_bfp_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 6}
+gng_fa_bfp_plot
+```
+
+\FloatBarrier
+
+\FloatBarrier
+
+### Percent Hits
+
+```{r gng_hits_bfp_mod, echo=FALSE, results='asis'}
+kable(round(gng_hits_bfp_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Go-NoGo - Percent Hits - Body Fat Percentage', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+
+\FloatBarrier
+
+### Go Reaction Time
+
+```{r gng_hits_rt_bfp_mod, echo=FALSE, results='asis'}
+kable(round(gng_rt_bfp_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Go-NoGo - Go Reaction Time', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+
+\FloatBarrier
+
+### d'
+
+```{r gng_dprime_bfp_mod, echo=FALSE, results='asis'}
+kable(round(gng_dprime_bfp_sum$coefficients, digits = 3), "latex",  digits = 3, caption = "Go-NoGo - d'", booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+
+\FloatBarrier
+\clearpage
+
+## Stop-Signal Task
+
+### Stop Signal Reaction Time
+
+
+#### Overall
+
+\FloatBarrier
+
+```{r sst_ssrt_bfp_mod, echo=FALSE, results='asis'}
+kable(round(sst_ssrt_bfp_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSRT - Body Fat Percentage', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+\
+
+```{r sst_ssrt_bfp_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 6}
+sst_ssrt_bfp_plot
+```
+
+\FloatBarrier
+
+### Energy Density Trials
+
+\FloatBarrier
+
+```{r sst_ssrt_bfp_EDmod, echo=FALSE, results='asis'}
+kable(round(sst_ssrt_bfp_EDsum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSRT - ED x Body Fat Percentage', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+\
+```{r sst_ssrt_bfp_EDmod_posthoc, echo=FALSE}
+test(emtrends(sst_ssrt_bfp_EDmod, ~ bfp_center, var = 'bfp_center'))
+emmeans(sst_ssrt_bfp_EDmod, specs = pairwise ~ ED)
+```
+
+\FloatBarrier
+
+### Portion Size Trials
+
+\FloatBarrier
+
+```{r sst_ssrt_bfp_PSmod, echo=FALSE, results='asis'}
+kable(round(sst_ssrt_bfp_PSsum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSRT - PS x Body Fat Percentage', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+\
+```{r sst_ssrt_bfp_PSmod_posthoc, echo=FALSE}
+test(emtrends(sst_ssrt_bfp_PSmod, ~ bfp_center, var = 'bfp_center'))
+emmeans(sst_ssrt_bfp_PSmod, specs = pairwise ~ PS)
+```
+\FloatBarrier
+\clearpage
+
+### Stop Signal Delay
+
+#### Overall
+
+\FloatBarrier
+
+```{r sst_ssd_bfp_mod, echo=FALSE, results='asis'}
+kable(round(sst_ssd_bfp_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSD - Body Fat Percentage', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\
+
+```{r sst_ssd_bfp_fig, echo=FALSE, includ = TRUE, fig.height = 4, fig.width = 6}
+sst_ssd_bfp_plot
+```
+
+
+\FloatBarrier
+\clearpage
+
+#### Energy Density Trials
+
+\FloatBarrier
+\clearpage
+
+```{r sst_ssd_bfp_EDmod, echo=FALSE, results='asis'}
+kable(round(sst_ssd_bfp_EDsum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSD - Body Fat Percentage x ED', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+\
+```{r sst_ssd_bfp_EDmod_posthoc, echo=FALSE}
+test(emtrends(sst_ssd_bfp_EDmod, ~ bfp_center, var = 'bfp_center'))
+emmeans(sst_ssd_bfp_EDmod, specs = pairwise ~ ED)
+```
+\FloatBarrier
+\clearpage
+
+#### Portion Size Trials
+
+\FloatBarrier
+
+```{r sst_ssd_bfp_PSmod, echo=FALSE, results='asis'}
+kable(round(sst_ssd_bfp_PSsum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSD - Body Fat Percentage x PS', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+\
+```{r sst_ssd_bfp_PSmod_posthoc, echo=FALSE}
+test(emtrends(sst_ssd_bfp_PSmod, ~ bfp_center, var = 'bfp_center'))
+emmeans(sst_ssd_bfp_PSmod, specs = pairwise ~ PS)
+```
+
+\FloatBarrier
+\clearpage
+
+## N-back
+
+### Ballanced Accuracy
+
+\FloatBarrier
+
+```{r nback_balacc_bfp_mod, echo=FALSE, results='asis'}
+kable(round(nback_balacc_bfp_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Nback Balanced Accuracy - Body Fat Percentage x Load', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+```{r nback_balacc_bfp_fig, echo=FALSE, includ = TRUE, fig.height = 4, fig.width = 6}
+nback_balacc_bfp_plot
+```
+
+```{r nback_balacc_bfp_mod_posthoc, echo=FALSE}
+emmeans(nback_balacc_bfp_mod, specs = pairwise ~ block)
+test(emtrends(nback_balacc_bfp_mod, ~ block:bfp_center, var = 'bfp_center'))
+```
+
+\FloatBarrier
+\clearpage
+
+### d'
+
+\FloatBarrier
+
+```{r nback_dprime_bfp_mod, echo=FALSE, results='asis'}
+kable(round(nback_dprime_bfp_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Nback Balanced Accuracy - Body Fat Percentage x Load', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+\
+
+```{r nback_dprime_bfp_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 6}
+nback_dprime_bfp_plot
+```
+
+\FloatBarrier
+\
+```{r nback_dprime_bfp_mod_posthoc, echo=FALSE}
+emmeans(nback_dprime_bfp_mod, specs = pairwise ~ block)
+test(emtrends(nback_dprime_bfp_mod, ~ bfp_center, var = 'bfp_center'))
+```
+\FloatBarrier
+\clearpage
+
+# Exploratory Analyses: relative impact of risk and body fat percentage
+
+## Go-NoGo
+
+### Percent False Alarms
+
+\FloatBarrier
+
+```{r gng_fa_bfp_risk_mod, echo=FALSE, results='asis'}
+kable(round(gng_fa_bfp_risk_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Go-NoGo Percent False Alarms - Body Fat Percentage + Risk Status', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\FloatBarrier
+
+```{r gng_fa_rwa_mod, echo=FALSE, results='asis'}
+kable(gng_fa_rwa$result, "latex",  digits = 3, caption = 'Go-NoGo Percent False Alarms - Relative Weighting Analysis', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+
+\FloatBarrier
+\clearpage
+
+## Stop-Signal Task
+
+### Stop Signal Reaction Time
+
+
+#### Overall
+
+\FloatBarrier
+
+```{r sst_ssrt_bfp_risk_mod, echo=FALSE, results='asis'}
+kable(round(sst_ssrt_bfp_risk_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSRT - Body Fat Percentage + Risk Status', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\FloatBarrier
+
+```{r sst_ssrt_rwa_mod, echo=FALSE, results='asis'}
+kable(sst_ssrt_rwa$result, "latex",  digits = 3, caption = 'Stop-Signal Task SSRT - Relative Weighting Analysis', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\FloatBarrier
+
+### Energy Density Trials
+
+\FloatBarrier
+
+```{r sst_ssrt_bfp_risk_EDmod, echo=FALSE, results='asis'}
+kable(round(sst_ssrt_bfp_risk_EDsum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSRT - ED  + Body Fat Percentage + Risk Status', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\FloatBarrier
+
+### Portion Size Trials
+
+\FloatBarrier
+
+```{r sst_ssrt_bfp_risk_PSmod, echo=FALSE, results='asis'}
+kable(round(sst_ssrt_bfp_risk_PSsum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSRT - PS + Body Fat Percentage + Risk Status', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\FloatBarrier
+\clearpage
+
+### Stop Signal Delay
+
+#### Overall
+
+\FloatBarrier
+
+```{r sst_ssd_bfp_risk_mod, echo=FALSE, results='asis'}
+kable(round(sst_ssd_bfp_risk_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSD - Body Fat Percentage + Risk Status', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\FloatBarrier
+
+```{r sst_ssd_rwa_mod, echo=FALSE, results='asis'}
+kable(sst_ssd_rwa$result, "latex",  digits = 3, caption = 'Stop-Signal Task SSD - Relative Weighting Analysis', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\FloatBarrier
+\clearpage
+
+#### Energy Density Trials
+
+\FloatBarrier
+\clearpage
+
+```{r sst_ssd_bfp_risk_EDmod, echo=FALSE, results='asis'}
+kable(round(sst_ssd_bfp_risk_EDsum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSD - ED + Body Fat Percentage + Risk Status', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+
+#### Portion Size Trials
+
+\FloatBarrier
+
+```{r sst_ssd_bfp_risk_PSmod, echo=FALSE, results='asis'}
+kable(round(sst_ssd_bfp_risk_PSsum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSD - PS + Body Fat Percentage + Risk Status', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\FloatBarrier
+\clearpage
+
+## N-back
+
+### Ballanced Accuracy
+
+\FloatBarrier
+
+```{r nback_balacc_bfp_risk_mod, echo=FALSE, results='asis'}
+kable(round(nback_balacc_bfp_risk_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Nback Balanced Accuracy - Body Fat Percentage x Load + Risk Status x Load', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+\FloatBarrier
+
+```{r nback_balacc_bfp_risk_mod_posthoc, echo=FALSE}
+emmeans(nback_balacc_bfp_risk_mod, specs = pairwise ~ risk_status_mom, adjust = 'none')
+emmeans(nback_balacc_bfp_risk_mod, specs = pairwise ~ block:risk_status_mom, adjust = 'none')
+test(emtrends(nback_balacc_bfp_risk_mod, ~ bfp_center, var = 'bfp_center'))
+```
+\FloatBarrier
+
+```{r nback_balacc_rwa_mod, echo=FALSE, results='asis'}
+kable(nback_balacc_rwa$result, "latex",  digits = 3, caption = 'Nback Balanced Accuracy - Relative Weighting Analysis', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+\FloatBarrier
+
+### d'
+
+\FloatBarrier
+
+```{r nback_dprime_bfp_risk_mod, echo=FALSE, results='asis'}
+kable(round(nback_dprime_bfp_risk_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Nback dprime - Body Fat Percentage x Load + Risk Status x Load', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+\FloatBarrier
+```{r nback_dprime_bfp_risk_mod_posthoc, echo=FALSE}
+emmeans(nback_dprime_bfp_risk_mod, specs = pairwise ~ risk_status_mom, adjust = 'none')
+emmeans(nback_dprime_bfp_risk_mod, specs = pairwise ~ block:risk_status_mom, adjust = 'none')
+test(emtrends(nback_dprime_bfp_risk_mod, ~ bfp_center, var = 'bfp_center'))
+```
+\FloatBarrier
+
+```{r nback_dprime_rwa_mod, echo=FALSE, results='asis'}
+kable(nback_dprime_rwa$result, "latex",  digits = 3, caption = 'Nback dprime - Relative Weighting Analysis', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\FloatBarrier
+\clearpage
+
+# Exploratory Analyses: remove BMI percentile >= 85 (reviewer comment)
+
+## Go-NoGo
+
+### Percent False Alarms
+
+\FloatBarrier
+
+```{r gng_fa_risk_p85_mod, echo=FALSE, results='asis'}
+kable(round(gng_fa_risk_p85_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Go-NoGo Percent False Alarms - Body Fat Percentage', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\FloatBarrier
+
+### Percent Hits
+
+```{r gng_hits_risk_p85_mod, echo=FALSE, results='asis'}
+kable(round(gng_hits_risk_p85_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Go-NoGo - Percent Hits - Body Fat Percentage', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+
+\FloatBarrier
+
+### Go Reaction Time
+
+```{r gng_hits_rt_risk_p85_mod, echo=FALSE, results='asis'}
+kable(round(gng_rt_risk_p85_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Go-NoGo - Go Reaction Time', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+
+\FloatBarrier
+
+### d'
+
+```{r gng_dprime_risk_p85_mod, echo=FALSE, results='asis'}
+kable(round(gng_dprime_risk_p85_sum$coefficients, digits = 3), "latex",  digits = 3, caption = "Go-NoGo - d'", booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+
+\FloatBarrier
+\clearpage
+
+## Stop-Signal Task
+
+### Stop Signal Reaction Time
+
+
+#### Overall
+
+\FloatBarrier
+
+```{r sst_ssrt_risk_p85_mod, echo=FALSE, results='asis'}
+kable(round(sst_ssrt_risk_p85_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSRT - Body Fat Percentage', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+\
+
+\FloatBarrier
+
+### Stop Signal Delay
+
+#### Overall
+
+\FloatBarrier
+
+```{r sst_ssd_risk_p85_mod, echo=FALSE, results='asis'}
+kable(round(sst_ssd_risk_p85_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSD - Body Fat Percentage', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\
+
+\FloatBarrier
+\clearpage
+
+## N-back
+
+### Ballanced Accuracy
+
+\FloatBarrier
+
+```{r nback_balacc_risk_p85_mod, echo=FALSE, results='asis'}
+kable(round(nback_balacc_risk_p85_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Nback Balanced Accuracy - Body Fat Percentage x Load', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\FloatBarrier
+\clearpage
+
+### d'
+
+\FloatBarrier
+
+```{r nback_dprime_risk_p85_mod, echo=FALSE, results='asis'}
+kable(round(nback_dprime_risk_p85_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Nback Balanced Accuracy - Body Fat Percentage x Load', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\FloatBarrier
+
+\clearpage
+
+# Exploratory Analyses: adjust for BMI-Z score (reviewer comment)
+
+## Go-NoGo
+
+### Percent False Alarms
+
+\FloatBarrier
+
+```{r gng_fa_risk_bmiz_mod, echo=FALSE, results='asis'}
+kable(round(gng_fa_risk_bmiz_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Go-NoGo Percent False Alarms - Body Fat Percentage', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\FloatBarrier
+
+### Percent Hits
+
+```{r gng_hits_risk_bmiz_mod, echo=FALSE, results='asis'}
+kable(round(gng_hits_risk_bmiz_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Go-NoGo - Percent Hits - Body Fat Percentage', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+
+\FloatBarrier
+
+### Go Reaction Time
+
+```{r gng_hits_rt_risk_bmiz_mod, echo=FALSE, results='asis'}
+kable(round(gng_rt_risk_bmiz_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Go-NoGo - Go Reaction Time', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+
+\FloatBarrier
+
+### d'
+
+```{r gng_dprime_risk_bmiz_mod, echo=FALSE, results='asis'}
+kable(round(gng_dprime_risk_bmiz_sum$coefficients, digits = 3), "latex",  digits = 3, caption = "Go-NoGo - d'", booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+
+\FloatBarrier
+\clearpage
+
+## Stop-Signal Task
+
+### Stop Signal Reaction Time
+
+
+#### Overall
+
+\FloatBarrier
+
+```{r sst_ssrt_risk_bmiz_mod, echo=FALSE, results='asis'}
+kable(round(sst_ssrt_risk_bmiz_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSRT - Body Fat Percentage', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+\
+
+\FloatBarrier
+
+### Stop Signal Delay
+
+#### Overall
+
+\FloatBarrier
+
+```{r sst_ssd_risk_bmiz_mod, echo=FALSE, results='asis'}
+kable(round(sst_ssd_risk_bmiz_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Stop-Signal Task SSD - Body Fat Percentage', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\
+
+\FloatBarrier
+\clearpage
+
+## N-back
+
+### Ballanced Accuracy
+
+\FloatBarrier
+
+```{r nback_balacc_risk_bmiz_mod, echo=FALSE, results='asis'}
+kable(round(nback_balacc_risk_bmiz_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Nback Balanced Accuracy - Body Fat Percentage x Load', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\FloatBarrier
+\clearpage
+
+### d'
+
+\FloatBarrier
+
+```{r nback_dprime_risk_bmiz_mod, echo=FALSE, results='asis'}
+kable(round(nback_dprime_risk_bmiz_sum$coefficients, digits = 3), "latex",  digits = 3, caption = 'Nback Balanced Accuracy - Body Fat Percentage x Load', booktabs=TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
+```
+
+\FloatBarrier
+
+\clearpage
