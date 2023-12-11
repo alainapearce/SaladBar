@@ -24,8 +24,11 @@
 
 # source('setup.R')
 
+# salad_bar_dat_use <- salad_bar_dat_use[!is.na(salad_bar_dat_use[["gender"]]) & !is.na(salad_bar_dat_use[["grade"]]) & !is.na(salad_bar_dat_use[["race_ethnicity"]]) & !is.na(salad_bar_dat_use[["paid_free_reduced"]]) & !is.na(salad_bar_dat_use[["lunch_dur"]]), ]
+
 ## participant table
-partab_data <- salad_bar_dat_use[c(55:57, 64, 60, 61)]
+salad_bar_dat_use$school_type <- factor(salad_bar_dat_use$school_type, levels = c('Elementary', 'Middle School', 'High School'))
+partab_data <- salad_bar_dat_use[c(55:57, 63, 60, 61)]
 
 partab_all <-
   tbl_summary(
@@ -39,21 +42,20 @@ partab_all <-
   modify_header(all_stat_cols() ~ "**Overall**") %>%
   add_n()
   
-partab_intake_data <- salad_bar_dat_use[salad_bar_dat_use[['fv_selected']] == 'Y', c(16, 18, 17, 62, 68, 67)]
+partab_select_data <- salad_bar_dat_use[salad_bar_dat_use[['fv_selected']] == 'Y', c(16, 69, 67, 66, 18, 17, 62)]
 
-partab_intake_all <-
+partab_select <-
   tbl_summary(
-    data = partab_intake_data,
-    value = list(fv_pre ~ "F/V Self-Served, g", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %', lunch_dur ~ "Lunch Period", time_to_eat ~ "Eating Duration"),
-    label = list(fv_pre ~ "F/V Self-Served, g", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %', lunch_dur ~ "Lunch Period", time_to_eat ~ "Eating Duration"),
-    type = list(fv_pre ~ "continuous", fv_consumed ~ 'continuous', fv_post ~ 'continuous', fv_prop_waste ~ 'continuous', lunch_dur ~ 'continuous', time_to_eat ~ "continuous"),
+    data = partab_select_data,
+    value = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g", lunch_dur ~ "Lunch Period", time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
+    label = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g", lunch_dur ~ "Lunch Period", time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
+    type = list(fv_consumed_cat ~ "categorical", fv_pre ~ "continuous", lunch_dur ~ 'continuous', time_to_eat ~ "continuous", fv_consumed ~ 'continuous', fv_post ~ 'continuous', fv_prop_waste ~ 'continuous'),
     statistic = all_continuous() ~ c("{mean} ({sd})"),
     missing = "ifany",
     digits = all_continuous() ~ 1) %>%
-  modify_header(all_stat_cols() ~ "**Overall**") %>%
   add_n()
 
-partab_school_data <- salad_bar_dat_use[c(4, 55:57, 64, 60, 61)]
+partab_school_data <- salad_bar_dat_use[c(4, 55:57, 63, 60, 61)]
 
 partab_all_school <-
   tbl_summary(
@@ -69,15 +71,16 @@ partab_all_school <-
   add_n() %>%
   add_p()
 
-partab_intake_school_data <- salad_bar_dat_use[salad_bar_dat_use[['fv_selected']] == 'Y', c(4, 16, 18, 17, 62, 68, 67)]
+partab_select_school_data <- salad_bar_dat_use[salad_bar_dat_use[['fv_selected']] == 'Y', c(4, 16, 67, 66, 69, 18, 17, 62)]
 
-partab_intake_school <-
+
+partab_select_school <-
   tbl_summary(
-    data = partab_intake_school_data,
+    data = partab_select_school_data,
     by = 'school_type',
-    value = list(fv_pre ~ "F/V Self-Served, g", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %', lunch_dur ~ "Lunch Period", time_to_eat ~ "Eating Duration"),
-    label = list(fv_pre ~ "F/V Self-Served, g", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %', lunch_dur ~ "Lunch Period", time_to_eat ~ "Eating Duration"),
-    type = list(fv_pre ~ "continuous", fv_consumed ~ 'continuous', fv_post ~ 'continuous', fv_prop_waste ~ 'continuous', lunch_dur ~ 'continuous', time_to_eat ~ "continuous"),
+    value = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g", lunch_dur ~ "Lunch Period", time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
+    label = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g", lunch_dur ~ "Lunch Period", time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
+    type = list(fv_consumed_cat ~ "categorical", fv_pre ~ "continuous", lunch_dur ~ 'continuous', time_to_eat ~ "continuous", fv_consumed ~ 'continuous', fv_post ~ 'continuous', fv_prop_waste ~ 'continuous'),
     statistic = all_continuous() ~ c("{mean} ({sd})"),
     missing = "ifany",
     digits = all_continuous() ~ 1) %>%
@@ -85,58 +88,22 @@ partab_intake_school <-
   add_n() %>%
   add_p()
 
+
 partab_merge <-
   tbl_merge(
     tbls = list(partab_all, partab_all_school),
     tab_spanner = c("**Full Sample**", "**School Type**")
   )
 
-partab_intake_merge <-
+partab_select_merge <-
   tbl_merge(
-    tbls = list(partab_intake_all, partab_intake_school),
+    tbls = list(partab_select, partab_select_school),
     tab_spanner = c("**Full Sample**", "**School Type**")
   )
 
+
 overall_table <-
-  tbl_stack(list(partab_merge, partab_intake_merge), group_header = c("", ""))
-
-## Model Tables ###
-
-# served 
-fv_served <- cbind.data.frame(fv_served_coef, fv_served_ES_coef, fv_served_MS_coef, fv_served_HS_coef)
-names(fv_served) <- c('all_irr', 'all_se', 'all_p', 'E_irr', 'E_se', 'E_p', 'M_irr', 'M_se', 'M_p', 'H_irr', 'H_se', 'H_p')
-rownames(fv_served) <- c('(intercept)', 'grade', 'gender, M', 'white', 'other', 'Black/AA', 'Paid Lunch', 'Lunch Dur', 'Time to Eat')
-
-fv_served_z <- cbind.data.frame(fv_served_coef_z, fv_served_ES_coef_z, fv_served_MS_coef_z, fv_served_HS_coef_z)
-names(fv_served_z) <- c('all_or', 'all_se', 'all_p', 'E_or', 'E_se', 'E_p', 'M_irr', 'M_se', 'M_p', 'H_or', 'H_se', 'H_p')
-rownames(fv_served_z) <- c('(intercept)', 'grade', 'gender, M', 'white', 'other', 'Black/AA', 'Paid Lunch', 'Lunch Dur', 'Time to Eat')
-
-# consumed
-fv_consumed <- cbind.data.frame(fv_consumed_coef, fv_consumed_ES_coef, fv_consumed_MS_coef, fv_consumed_HS_coef)
-names(fv_consumed) <- c('all_irr', 'all_se', 'all_p', 'E_irr', 'E_se', 'E_p', 'M_irr', 'M_se', 'M_p', 'H_irr', 'H_se', 'H_p')
-rownames(fv_consumed) <- c('(intercept)', 'grade', 'gender, M', 'white', 'other', 'Black/AA', 'Paid Lunch', 'Lunch Dur', 'Time to Eat')
-
-fv_consumed_z <- cbind.data.frame(fv_consumed_coef_z, fv_consumed_ES_coef_z, fv_consumed_MS_coef_z, fv_consumed_HS_coef_z)
-names(fv_consumed_z) <- c('all_or', 'all_se', 'all_p', 'E_or', 'E_se', 'E_p', 'M_irr', 'M_se', 'M_p', 'H_or', 'H_se', 'H_p')
-rownames(fv_consumed_z) <- c('(intercept)', 'grade', 'gender, M', 'white', 'other', 'Black/AA', 'Paid Lunch', 'Lunch Dur', 'Time to Eat')
-
-# waste
-fv_waste <- cbind.data.frame(fv_waste_coef, fv_waste_ES_coef, fv_waste_MS_coef, fv_waste_HS_coef)
-names(fv_waste) <- c('all_irr', 'all_se', 'all_p', 'E_irr', 'E_se', 'E_p', 'M_irr', 'M_se', 'M_p', 'H_irr', 'H_se', 'H_p')
-rownames(fv_waste) <- c('(intercept)', 'grade', 'gender, M', 'white', 'other', 'Black/AA', 'Paid Lunch', 'Lunch Dur', 'Time to Eat')
-
-fv_waste_z <- cbind.data.frame(fv_waste_coef_z, fv_waste_ES_coef_z, fv_waste_MS_coef_z, fv_waste_HS_coef_z)
-names(fv_waste_z) <- c('all_or', 'all_se', 'all_p', 'E_or', 'E_se', 'E_p', 'M_irr', 'M_se', 'M_p', 'H_or', 'H_se', 'H_p')
-rownames(fv_waste_z) <- c('(intercept)', 'grade', 'gender, M', 'white', 'other', 'Black/AA', 'Paid Lunch', 'Lunch Dur', 'Time to Eat')
-
-# percent waste
-fv_prop_waste <- cbind.data.frame(fv_prop_waste_coef, fv_prop_waste_ES_coef, fv_prop_waste_MS_coef, fv_prop_waste_HS_coef)
-names(fv_prop_waste) <- c('all_irr', 'all_se', 'all_p', 'E_irr', 'E_se', 'E_p', 'M_irr', 'M_se', 'M_p', 'H_irr', 'H_se', 'H_p')
-rownames(fv_prop_waste) <- c('(intercept)', 'grade', 'gender, M', 'white', 'other', 'Black/AA', 'Paid Lunch', 'Lunch Dur', 'Time to Eat')
-
-fv_prop_waste_z <- cbind.data.frame(fv_prop_waste_coef_z, fv_prop_waste_ES_coef_z, fv_prop_waste_MS_coef_z, fv_prop_waste_HS_coef_z)
-names(fv_prop_waste_z) <- c('all_or', 'all_se', 'all_p', 'E_or', 'E_se', 'E_p', 'M_irr', 'M_se', 'M_p', 'H_or', 'H_se', 'H_p')
-rownames(fv_prop_waste_z) <- c('(intercept)', 'grade', 'gender, M', 'white', 'other', 'Black/AA', 'Paid Lunch', 'Lunch Dur', 'Time to Eat')
+  tbl_stack(list(partab_merge, partab_select_merge), group_header = c("", ""))
 
 
 ## Complete vs Missing ####
@@ -183,7 +150,7 @@ partab_merge_tte <-
 
 partab_intake_merge_tte <-
   tbl_merge(
-    tbls = list(partab_intake_all, partab_intake_tte),
+    tbls = list(partab_select, partab_intake_tte),
     tab_spanner = c("**Full Sample**", "**Time to Eat Data**")
   )
 

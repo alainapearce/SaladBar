@@ -38,6 +38,7 @@ library(lubridate)
 library(GLMMadaptive)
 library(car)
 library(emmeans)
+library(ggplot2)
 
 library(gtsummary)
 theme_gtsummary_compact()
@@ -45,6 +46,7 @@ theme_gtsummary_compact()
 ```
 
 ```{r load_scripts, echo=FALSE, results='asis'}
+source('functions.R')
 source('setup.R')
 source('tte_analyses.R')
 source('tte_tables.R')
@@ -53,13 +55,21 @@ source('tte_tables.R')
 \clearpage
 
 # Demographic Characteristics
-*note: restricted to complete data (no missing for time to eat or other intake variables - happy to revisit imputation)
+*note - restricted to:
+  - pre (selected) > post (waste)
+  - time to eat is not NA
+  - pre (selected) is not NA
+  - post (waste) is not NA
+  - missing data for any covariates used in models (age not included in models)
 \
 \FloatBarrier
 ```{r demo_tab, echo=FALSE, results='asis'}
   as_kable_extra(overall_table, caption = 'Demographic Characteristics and Variables of Interest', format = "latex", booktabs = TRUE, longtable = FALSE) %>%
   kableExtra::kable_styling(latex_options = "HOLD_position",  full_width = FALSE)
 ```
+
+\
+*intake data means and standard deviations restricted to those who selected F/V. Means for consumed restricted to those with FV consumption > 0 is in text with that model.
 
 \FloatBarrier
 \clearpage
@@ -125,6 +135,22 @@ fv_prop_waste_emmeans$contrasts
 \FloatBarrier
 \clearpage
 
+# Association between TTE and Lunch Duration
+
+```{r tte_lunch_cor, echo=FALSE}
+cor.test(salad_bar_dat_use[['time_to_eat']], salad_bar_dat_use[['lunch_dur']], na.rm = TRUE)
+```
+
+\
+There is no association between time to eat and lunch duration for the whole smaple (r = 0.03, p = 0.172).
+\
+\FloatBarrier
+```{r tte_plot, include=TRUE, echo=FALSE}
+tte_boxplot_nooutline
+```
+
+\clearpage
+
 # Fruit/Vegetable Selected
 
 
@@ -183,16 +209,16 @@ kable(round(fv_consumed, digits = 3), "latex",  digits = 3, caption = 'Fruit/Veg
 ```
 
 \
-Overall Model: mean consumed = 50.85 g, Each 10 more minutes spent eating (i.e., time to eat) is associated with a 13% increase in grams of F/V consumed relative to mean (for those that chose F/V) - over 1 week this equates to 33 g increase of F/V consumed
+Overall Model: mean consumed = 50.85 g, SD = 54.67 g. Each 10 more minutes spent eating (i.e., time to eat) is associated with a 13% increase in grams of F/V consumed relative to mean (for those that chose F/V) - over 1 week this equates to 33 g increase of F/V consumed
 \
 
-Elementary: mean consumed = 47.07 g, Each 10 more minutes spent eating (i.e., time to eat) is associated with a 16% increase in grams of F/V consumed relative to mean (for those that chose F/V) - over 1 week this equates to 37.5 g increase of F/V consumed
+Elementary: mean consumed = 47.07 g, SD = 49.16 g. Each 10 more minutes spent eating (i.e., time to eat) is associated with a 16% increase in grams of F/V consumed relative to mean (for those that chose F/V) - over 1 week this equates to 37.5 g increase of F/V consumed
 \
 
-High Schools: mean consumed = 47.40 g, Each 10 more minutes spent eating (i.e., time to eat) is associated with a 8% increase in grams of F/V consumed relative to mean (for those that chose F/V) - over 1 week this equates to 19 g increase of F/V consumed
+High Schools: mean consumed = 47.40 g, SD = 56.26 g. Each 10 more minutes spent eating (i.e., time to eat) is associated with a 8% increase in grams of F/V consumed relative to mean (for those that chose F/V) - over 1 week this equates to 19 g increase of F/V consumed
 \
 
-Middle Schools - Time to Eat is non-significant for grams of F/V consumed (for those that selected some F/V)
+Middle Schools: mean consumed = 56.78 g, SD = 56.26 g. Time to Eat is non-significant for grams of F/V consumed (for those that selected some F/V)
 
 \
 

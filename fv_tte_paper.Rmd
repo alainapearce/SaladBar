@@ -1,0 +1,599 @@
+---
+title: "Salad Bar Study: Time to Eat and Fruit and Vegetable Intake"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+header-includes:
+- \usepackage{fullpage}
+- \usepackage{graphicx}
+- \usepackage{subcaption}
+- \usepackage{float}
+- \usepackage{placeins}
+- \usepackage{caption}
+- \usepackage{mathtools}
+# - \usepackage{multirow}
+- \usepackage{amssymb}
+- \usepackage{amsmath}
+- \usepackage{bigstrut}
+- \usepackage{geometry}
+# - \usepackage{pdflscape}
+- \setlength{\parskip}{1em}
+geometry: margin=1.3cm
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(tidy = TRUE, tidy.opts = list(comment = FALSE), echo = TRUE, fig.width=6, fig.height=4, fig.path='figs/', fig.pos='H', echo=FALSE, cache = FALSE, warning=FALSE, message=FALSE, comment = NA)
+```
+
+<!-- load startup file and any extra packages -->
+```{r load, echo=FALSE, include=FALSE}
+library(knitr)
+library(kableExtra)
+library(stats)
+library(haven)
+library(lubridate)
+library(GLMMadaptive)
+library(car)
+library(emmeans)
+library(ggplot2)
+library(lme4)
+library(lmerTest)
+
+library(gtsummary)
+theme_gtsummary_compact()
+
+```
+
+```{r load_scripts, echo=FALSE}
+source('functions.R')
+source('setup.R')
+source('tte_analyses.R')
+source('tte_tables.R')
+```
+
+\clearpage
+
+# Demographic Characteristics
+*note - restricted to:
+  - pre (selected) > post (waste)
+  - time to eat is not NA and is > 0
+  - pre (selected) is not NA
+  - post (waste) is not NA
+  - missing data for any covariates used in models (age not included in models)
+\
+\FloatBarrier
+```{r demo_tab, echo=FALSE, results='asis'}
+  as_kable_extra(overall_table, caption = 'Demographic Characteristics and Variables of Interest', format = "latex", booktabs = TRUE, longtable = FALSE) %>%
+  kableExtra::kable_styling(latex_options = "HOLD_position",  full_width = FALSE)
+```
+
+\
+*intake data means and standard deviations restricted to those who selected F/V. Means for consumed restricted to those with FV consumption > 0 is in text with that model.
+
+\
+Negative eating duration values:
+```{r tte_neg, echo=TRUE}
+salad_bar_dat[!is.na(salad_bar_dat[['time_to_eat']]) &salad_bar_dat[['time_to_eat']] < 0, 'time_to_eat']
+```
+
+\FloatBarrier
+\clearpage
+
+## Follow-up Tests by School Type
+\
+Total Sample Sizes: Full N = 2226, Elementary N = 630, Middle School N = 699, High School N = 897
+
+\
+\FloatBarrier
+
+### gender
+```{r demo_gender_schooltype, echo=FALSE}
+gender_chi
+```
+
+### age
+```{r demo_age_schooltype, echo=FALSE}
+age_anova
+age_emmeans$contrasts
+```
+
+### race/ethnicity
+```{r demo_raceethnicity_schooltype, echo=FALSE}
+raceethnicity_chi
+```
+
+### free-reduced lunch
+```{r demo_frl_schooltype, echo=FALSE}
+frl_chi
+```
+
+### fruit/veg selected
+```{r demo_fv_select_schooltype, echo=FALSE}
+fv_selected_chi
+```
+
+### lunch duration
+```{r demo_lunch_dur_schooltype, echo=FALSE}
+lunch_dur_anova
+lunch_dur_emmeans$contrasts
+```
+
+### time to eat
+```{r demo_tte_dur_schooltype, echo=FALSE}
+tte_anova
+tte_emmeans$contrasts
+```
+
+### fruit/veg amount selected
+```{r demo_fv_g_select_schooltype, echo=FALSE}
+fv_pre_anova
+fv_pre_emmeans$contrasts
+```
+
+### fruit/veg consumed
+```{r demo_fv_consumed_schooltype, echo=FALSE}
+fv_consumed_anova
+fv_consumed_emmeans$contrasts
+```
+
+### fruit/veg waste
+```{r demo_fv_waste_schooltype, echo=FALSE}
+fv_post_anova
+fv_post_emmeans$contrasts
+```
+
+### fruit/veg waste proportion
+*restricted to selected only
+\
+\FloatBarrier
+```{r demo_fv_prop_waste_schooltype, echo=FALSE}
+fv_prop_waste_anova
+fv_prop_waste_emmeans$contrasts
+```
+
+\FloatBarrier
+\clearpage
+
+# Association between TTE and Lunch Duration
+
+```{r tte_lunch_cor, echo=FALSE}
+cor.test(salad_bar_dat_use[['time_to_eat']], salad_bar_dat_use[['lunch_dur']], na.rm = TRUE)
+```
+
+\
+There is no association between time to eat and lunch duration for the whole smaple (r = 0.03, p = 0.172).
+\
+\FloatBarrier
+```{r tte_plot, include=TRUE, echo=FALSE}
+tte_boxplot_nooutline
+```
+
+\clearpage
+
+# Fruit/Vegetable Selected
+
+
+```{r fv_pre_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 4}
+hist(salad_bar_dat_use[['fv_pre']], main = 'Histogram of Selected Fruits/Vegetables, g', xlab = 'Fruit/Vegetables, g')
+```
+
+
+\FloatBarrier
+
+<!-- ## Interaction -->
+
+<!-- ```{r fv_pre_int_mod, echo=FALSE} -->
+<!-- fv_served_int_sum -->
+<!-- ``` -->
+
+\FloatBarrier
+
+## Overall
+
+```{r fv_pre_mod, echo=FALSE}
+round(fv_served_sum$coefficients, 3)
+```
+
+\FloatBarrier
+
+## Elementary
+
+```{r fv_pre_ES_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 4}
+hist(salad_bar_dat_use[salad_bar_dat_use$school_type == 'Elementary', 'fv_pre'], main = 'Histogram of Selected Fruits/Vegetables, g', xlab = 'Fruit/Vegetables, g')
+```
+
+\FloatBarrier
+
+```{r fv_pre_ES_mod, echo=FALSE}
+round(fv_served_ES_sum$coefficients, 3)
+```
+
+\FloatBarrier
+
+## Middle School
+
+```{r fv_pre_MS_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 4}
+hist(salad_bar_dat_use[salad_bar_dat_use$school_type == 'Middle School', 'fv_pre'], main = 'Histogram of Selected Fruits/Vegetables, g', xlab = 'Fruit/Vegetables, g')
+```
+\FloatBarrier
+
+```{r fv_pre_MS_mod, echo=FALSE}
+round(fv_served_MS_sum$coefficients, 3)
+```
+
+\FloatBarrier
+
+## High School
+
+```{r fv_pre_HS_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 4}
+hist(salad_bar_dat_use[salad_bar_dat_use$school_type == 'High School', 'fv_pre'], main = 'Histogram of Selected Fruits/Vegetables, g', xlab = 'Fruit/Vegetables, g')
+```
+\FloatBarrier
+
+```{r fv_pre_HS_mod, echo=FALSE}
+round(fv_served_HS_sum$coefficients, 3)
+```
+
+
+\FloatBarrier
+\clearpage
+
+# Fruit/Vegetable Consumed
+
+```{r fv_consumed_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 4}
+hist(salad_bar_dat_use[salad_bar_dat_use[['fv_selected']] == 'Y', 'fv_consumed'], main = 'Histogram of Consumed Fruits/Vegetables, g', xlab = 'Fruit/Vegetables, g')
+```
+
+\FloatBarrier
+
+-mean and sd for participants that consumed F/V
+
+```{r fv_consumed_mean, echo=FALSE}
+mean(salad_bar_dat_use[salad_bar_dat_use$fv_consumed_cat == 'Y', 'fv_consumed'])
+
+sd(salad_bar_dat_use[salad_bar_dat_use$fv_consumed_cat == 'Y', 'fv_consumed'])
+```
+
+\FloatBarrier
+
+\
+Total Sample Sizes: Full N = 2226, Elementary N = 630, Middle School N = 699, High School N = 897
+\
+
+<!-- ## Interaction -->
+<!-- ```{r fv_consumed_int_mod, echo=FALSE} -->
+<!-- fv_consumed_int_sum -->
+<!-- ``` -->
+
+\FloatBarrier
+
+
+## Overall
+```{r fv_consumed_mod, echo=FALSE}
+fv_consumed_sum
+```
+
+\FloatBarrier
+
+### IRR
+
+```{r fv_consumed_irr, echo=FALSE, asis = TRUE}
+as.matrix(exp(fv_consumed_sum$coef_table_zi[ ,1]), nrow = 9)
+```
+
+\FloatBarrier
+
+### OR
+
+```{r fv_consumed_or, echo=FALSE}
+as.matrix(exp(fv_consumed_sum$coef_table[ ,1]), nrow = 9)
+```
+
+\FloatBarrier
+\clearpage
+
+## Elementary
+
+```{r fv_consumed_ES_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 4}
+hist(salad_bar_dat_use[salad_bar_dat_use['fv_selected'] == 'Y' & salad_bar_dat_use['school_type'] == 'Elementary', 'fv_consumed'], main = 'Histogram of Consumed Fruits/Vegetables, g', xlab = 'Fruit/Vegetables, g')
+```
+
+\FloatBarrier
+
+-mean and sd for participants that consumed F/V
+
+```{r fv_consumed_ES_mean, echo=FALSE}
+mean(salad_bar_dat_use[salad_bar_dat_use$fv_consumed_cat == 'Y' & salad_bar_dat_use$school_type == 'Elementary', 'fv_consumed'])
+
+sd(salad_bar_dat_use[!salad_bar_dat_use$fv_consumed_cat == 'Y' & salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$school_type == 'Elementary', 'fv_consumed'])
+```
+
+\FloatBarrier
+
+```{r fv_consumed_ES_mod, echo=FALSE}
+fv_consumed_ES_sum
+```
+
+\FloatBarrier
+
+
+### IRR
+
+```{r fv_consumed_ES_irr, echo=FALSE, asis = TRUE}
+as.matrix(exp(fv_consumed_ES_sum$coef_table_zi[ ,1]), nrow = 9)
+```
+
+\FloatBarrier
+
+### OR
+
+```{r fv_consumed_ES_or, echo=FALSE}
+as.matrix(exp(fv_consumed_ES_sum$coef_table[ ,1]), nrow = 9)
+```
+
+\FloatBarrier
+\clearpage
+
+## Middle School
+
+```{r fv_consumed_MS_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 4}
+hist(salad_bar_dat_use[salad_bar_dat_use['fv_selected'] == 'Y' & salad_bar_dat_use['school_type'] == 'Middle School', 'fv_consumed'], main = 'Histogram of Consumed Fruits/Vegetables, g', xlab = 'Fruit/Vegetables, g')
+```
+
+\FloatBarrier
+
+-mean and sd for participants that consumed F/V
+
+```{r fv_consumed_MS_mean, echo=FALSE}
+mean(salad_bar_dat_use[salad_bar_dat_use$fv_consumed_cat == 'Y' & salad_bar_dat_use$school_type == 'Middle School', 'fv_consumed'])
+
+sd(salad_bar_dat_use[salad_bar_dat_use$fv_consumed_cat == 'Y' & salad_bar_dat_use$school_type == 'Middle School', 'fv_consumed'])
+```
+
+
+\FloatBarrier
+
+```{r fv_consumed_MS_mod, echo=FALSE}
+fv_consumed_MS_sum
+```
+\FloatBarrier
+
+### IRR
+
+```{r fv_consumed_MS_irr, echo=FALSE, asis = TRUE}
+as.matrix(exp(fv_consumed_MS_sum$coef_table_zi[ ,1]), nrow = 9)
+```
+
+\FloatBarrier
+
+### OR
+
+```{r fv_consumed_MS_or, echo=FALSE}
+as.matrix(exp(fv_consumed_MS_sum$coef_table[ ,1]), nrow = 9)
+```
+
+\FloatBarrier
+\clearpage
+
+## High School
+
+```{r fv_consumed_HS_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 4}
+hist(salad_bar_dat_use[salad_bar_dat_use['fv_selected'] == 'Y' & salad_bar_dat_use['school_type'] == 'High School', 'fv_consumed'], main = 'Histogram of Consumed Fruits/Vegetables, g', xlab = 'Fruit/Vegetables, g')
+```
+
+\FloatBarrier
+
+-mean and sd for participants that consumed F/V
+
+```{r fv_consumed_HS_mean, echo=FALSE}
+mean(salad_bar_dat_use[salad_bar_dat_use['fv_selected'] == 'Y' & salad_bar_dat_use$school_type == 'High School', 'fv_consumed'])
+
+sd(salad_bar_dat_use[salad_bar_dat_use['fv_selected'] == 'Y' & salad_bar_dat_use$school_type == 'High School', 'fv_consumed'])
+```
+
+\FloatBarrier
+
+```{r fv_consumed_HS_mod, echo=FALSE}
+fv_consumed_HS_sum
+```
+
+\FloatBarrier
+
+### IRR
+
+```{r fv_consumed_HS_irr, echo=FALSE, asis = TRUE}
+as.matrix(exp(fv_consumed_HS_sum$coef_table_zi[ ,1]), nrow = 9)
+```
+
+\FloatBarrier
+
+### OR
+
+```{r fv_consumed_HS_or, echo=FALSE}
+as.matrix(exp(fv_consumed_HS_sum$coef_table[ ,1]), nrow = 9)
+```
+
+\FloatBarrier
+\clearpage
+
+# Fruit/Vegetable Percent Waste
+
+```{r fv_prop_waste_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 4}
+hist(salad_bar_dat_use[salad_bar_dat_use[['fv_selected']] == 'Y', 'fv_prop_waste'], main = 'Histogram of Percent Fruits/Vegetables Waste, %', xlab = 'Fruit/Vegetables, %')
+```
+
+\FloatBarrier
+## Overall
+
+-mean and sd for participants that wasted some F/V but not 100%
+
+```{r fv_prop_waste_mean, echo=FALSE}
+mean(salad_bar_dat_use[salad_bar_dat_use$fv_prop_waste < 100 & salad_bar_dat_use$fv_prop_waste > 0 & salad_bar_dat_use$fv_selected == 'Y', 'fv_prop_waste'], na.rm = TRUE)
+
+sd(salad_bar_dat_use[salad_bar_dat_use$fv_prop_waste < 100 & salad_bar_dat_use$fv_prop_waste > 0 & salad_bar_dat_use$fv_selected == 'Y', 'fv_prop_waste'], na.rm = TRUE)
+```
+
+\FloatBarrier
+
+```{r fv_prop_waste_mod, echo=FALSE}
+fv_prop_waste_sum
+```
+
+\FloatBarrier
+
+### IRR
+
+```{r fv_prop_waste_irr, echo=FALSE, asis = TRUE}
+as.matrix(exp(fv_prop_waste_sum$coef_table_zi[ ,1]), nrow = 9)
+```
+
+\FloatBarrier
+
+### OR
+
+```{r fv_prop_waste_or, echo=FALSE}
+as.matrix(exp(fv_prop_waste_sum$coef_table[ ,1]), nrow = 9)
+```
+
+\FloatBarrier
+\clearpage
+
+## Elementary
+
+```{r fv_prop_waste_ES_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 4}
+hist(salad_bar_dat_use[salad_bar_dat_use['fv_selected'] == 'Y' & salad_bar_dat_use['school_type'] == 'Elementary', 'fv_prop_waste'], main = 'Histogram of Percent Fruits/Vegetables Waste, %', xlab = 'Fruit/Vegetables, %')
+```
+
+\FloatBarrier
+
+-mean and sd for participants that wasted some F/V but not 100%
+
+```{r fv_prop_waste_ES_mean, echo=FALSE}
+mean(salad_bar_dat_use[!salad_bar_dat_use$fv_prop_waste < 100 & salad_bar_dat_use$fv_prop_waste > 0 & salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$school_type == 'Elementary', 'fv_prop_waste'])
+
+sd(salad_bar_dat_use[salad_bar_dat_use$fv_prop_waste < 100 & salad_bar_dat_use$fv_prop_waste > 0 & salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$school_type == 'Elementary', 'fv_prop_waste'])
+```
+
+\FloatBarrier
+
+```{r fv_prop_waste_ES_mod, echo=FALSE}
+fv_prop_waste_ES_sum
+```
+
+\FloatBarrier
+
+### IRR
+
+```{r fv_prop_waste_ES_irr, echo=FALSE, asis = TRUE}
+as.matrix(exp(fv_prop_waste_ES_sum$coef_table_zi[ ,1]), nrow = 9)
+```
+
+\FloatBarrier
+
+### OR
+
+```{r fv_prop_waste_ES_or, echo=FALSE}
+as.matrix(exp(fv_prop_waste_ES_sum$coef_table[ ,1]), nrow = 9)
+```
+
+\FloatBarrier
+\clearpage
+
+## Middle School
+
+```{r fv_prop_waste_MS_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 4}
+hist(salad_bar_dat_use[salad_bar_dat_use['fv_selected'] == 'Y' & salad_bar_dat_use['school_type'] == 'Middle School', 'fv_prop_waste'], main = 'Histogram of Percent Fruits/Vegetables Waste, %', xlab = 'Fruit/Vegetables, %')
+```
+
+\FloatBarrier
+
+-mean and sd for participants that wasted some F/V but not 100%
+
+```{r fv_prop_waste_MS_mean, echo=FALSE}
+mean(salad_bar_dat_use[salad_bar_dat_use$fv_prop_waste < 100 & salad_bar_dat_use$fv_prop_waste > 0 & salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$school_type == 'Middle School', 'fv_prop_waste'])
+
+sd(salad_bar_dat_use[salad_bar_dat_use$fv_prop_waste < 100 & salad_bar_dat_use$fv_prop_waste > 0 & salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$school_type == 'Middle School', 'fv_prop_waste'])
+```
+
+\FloatBarrier
+
+
+```{r fv_prop_waste_MS_mod, echo=FALSE}
+fv_prop_waste_MS_sum
+```
+
+\FloatBarrier
+
+### IRR
+
+```{r fv_prop_waste_MS_irr, echo=FALSE, asis = TRUE}
+as.matrix(exp(fv_prop_waste_MS_sum$coef_table_zi[ ,1]), nrow = 9)
+```
+
+\FloatBarrier
+
+### OR
+
+```{r fv_prop_waste_MS_or, echo=FALSE}
+as.matrix(exp(fv_prop_waste_mS_sum$coef_table[ ,1]), nrow = 9)
+```
+
+\FloatBarrier
+\clearpage
+
+## High School
+
+
+```{r fv_prop_waste_HS_plot, echo=FALSE, include = TRUE, fig.height = 4, fig.width = 4}
+hist(salad_bar_dat_use[salad_bar_dat_use['fv_selected'] == 'Y' & salad_bar_dat_use['school_type'] == 'High School', 'fv_prop_waste'], main = 'Histogram of Percent Fruits/Vegetables Waste, %', xlab = 'Fruit/Vegetables, %')
+```
+
+\FloatBarrier
+
+-mean and sd for participants that wasted some F/V but not 100%
+
+```{r fv_prop_waste_HS_mean, echo=FALSE}
+mean(salad_bar_dat_use[salad_bar_dat_use$fv_prop_waste < 100 & salad_bar_dat_use$fv_prop_waste > 0 & salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$school_type == 'High School', 'fv_prop_waste'])
+
+sd(salad_bar_dat_use[salad_bar_dat_use$fv_prop_waste < 100 & salad_bar_dat_use$fv_prop_waste > 0 & salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$school_type == 'High School', 'fv_prop_waste'])
+```
+
+\FloatBarrier
+
+```{r fv_prop_waste_HS_mod, echo=FALSE}
+fv_prop_waste_HS_sum
+```
+
+\FloatBarrier
+### IRR
+
+```{r fv_prop_waste_HS_irr, echo=FALSE, asis = TRUE}
+as.matrix(exp(fv_prop_waste_HS_sum$coef_table_zi[ ,1]), nrow = 9)
+```
+
+\FloatBarrier
+
+### OR
+
+```{r fv_prop_waste_HS_or, echo=FALSE}
+as.matrix(exp(fv_prop_waste_HS_sum$coef_table[ ,1]), nrow = 9)
+```
+
+\FloatBarrier
+\clearpage
+
+
+# Supplemental Information -- Complete vs Missing Time to Eat ####
+
+## Demographic Characteristics
+
+```{r demo_tab_tte, echo=FALSE, results='asis'}
+  as_kable_extra(overall_table_tte, caption = 'Demographic Characteristics and Variables of Interest', format = "latex", booktabs = TRUE, longtable = FALSE) %>%
+  kableExtra::kable_styling(latex_options = "HOLD_position",  full_width = FALSE)
+```
+
+\FloatBarrier
+\clearpage

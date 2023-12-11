@@ -1,42 +1,38 @@
-School Name,urban=1,Address,"ES, JHS, or HS?",Grade Level Under Study,Locale Type,Locale class Rural or Urban?,"Code- Rural ""0"" or Urban ""1""?",Notes
-Academia del Pueblo,2,"201 E. Durango St, Phoenix, AZ 85004, USA",ES & JHS,Grades 6-8,"City, Large",Urban,1,
-Academy of Math and Science(Flower) Middle School,3,"3335 W Flower St, Phoenix, AZ 85017",ES & JHS (K-8),Grades 6-8,"City, Large",Urban,1,
-Aguilar Elementary,4,"5800 S. Forest Ave.
-Tempe, AZ 85283",ES,Grades 1-5,"City, Midsize",Urban,1,
-Alice Vail Middle School,5,"5350 E 16th St. Tucson, AZ 85711 4404",JHS (6-8),Grades 6-8 ,"City, Large",Urban,1,
-AZ City Elementary,1,"3315 N. Toltec Rd. Eloy, AZ 85131",ES,Grades 1-5,"Rural, Fringe",Rural,0,was town fringe with school name
-Beaver Creek Elementary,6,"810 E Beaver Creek Rd. Rimrock, AZ 86335 6241",ES and JHS,Grades 1-5,"Town, Distant",Rural,0,in a fringe town area though
-Black Mountain Elementary,7,"33606 N. 60th Street, Scottsdale, AZ, 85266",ES (K-6),Grades 1-5,"City, Midsize",Urban,1,
-Broadmor Elementary School,8,"311 E Aepli Dr., Tempe, AZ 85282 2205",ES,Grades 1-5,"City, Midsize",Urban,1,
-Cactus Shadows High School,9,"5802 East Dove Valley Road, Scottsdale, AZ 85266",HS,Grades 9-12,"City, Midsize",Urban,1,"split in middle it appears with address, but with typing In school name more clear-midsize city"
-Camelback Academy,10,7634 W Camelback Rd Glendale AZ 85303,ES,Grades 1-5,"Suburb, Large",Urban,1,
-Coronado High School,12,"7501 E. Virginia Ave. Scottsdale, AZ 85257 ",HS,Grades 9-12,"City, Midsize",Urban,1,
-Toltecalli High School,36,"251 W. Irvington Rd., Tucson, AZ 85714",HS (9-12),Grades 9-12,"City, Large",Urban,1,
-EAGLE Prep,13,"2450 W. South Mountain Ave. Phoenix, AZ 85041 7601",ES & JHS(K-8),Grade 1-5,"City, Large",Urban,1,
-Eloy Junior High School,14,"404 East Phoenix Ave.
-Eloy, AZ 85131",JHS,Grades 6-8,"Town, Fringe",Rural,0,"appears half rural/town fringe; went to 100% transparency to determine whether school is town or rural, it appears that school belongs to town community so leaned fringe town"
-Franklin Phonetic School,15,"6116 AZ-69, Prescott Valley, AZ 86314",ES & JHS (K-8),Grades 1-5,"Suburb, Small",Urban,1,
-GateWay Early College High School,16,"108 N 40th St, Phoenix, AZ 85034",HS (9-12),Grades 9-12,"City, Large",Urban,1,
-Gila Ridge High School,17,"7150 E 24th St, Yuma, AZ 85365",HS (9-12),Grades 9-12,"Rural, Fringe",Rural,0,"Fully in rural fringe, but surrounding area is small city"
-High Desert Middle School,18,"4000 High Desert Dr, Globe, AZ 85501",JHS (6-8),Grades 6-8,"Rural, Fringe",Rural,0,
-Isaac Middle School,19,"3402 W McDowell Rd, Phoenix, AZ 85009",JHS (6-8),Grades 6-8,"City, Large",Urban,1,
-Leading Edge Maricopa,20,"18700 N Porter Rd, Maricopa, AZ 85138",ES & JHS (K-8),Grades 1-5,"Town, Distant",Rural,0,
-Madison Meadows Middle School,21,"225 W. Ocotillo Rd., Phoenix, AZ 85013",JHS,Grades 6-8,"City, Large",Urban,1,
-Magma Ranch Middle School,22,"10980 E. Desert Mountain Boulevard, Florence, AZ 85132",ES & JHS (K-8),Grades 6-8,"Rural, Fringe",Rural,0,
-Paideia Academy,23,"7777 S 15th Terrace, Phoenix, AZ 85042",ES,Grades 1-5,"City, Large",Urban,1,
-Pan-American High School,25,"2020 W Indian School Rd, Phoenix, AZ 85015",JHS & HS (7- 12(,Grades 9-12,"City, Large",Urban,1,
-Pan-American Elementary School,24,"3001 W Indian School Rd, Phoenix, AZ 85017",ES (3-6) for this campus,Grades 3-5,"City, Large",Urban,1,
-Payne Junior High School,26,"7655 S. Higley Rd. Queen Creek, AZ 85142",JHS (7-8),Grades 7-8,"Suburb, Large",Urban,1,
-Pensar Academy Middle School,27,"6135 N. Black Canyon Highway, Phoenix, AZ 85015",ES & JHS (4-8),Grades 6-8,"City, Large",Urban,1,
-Cesar Chavez High School,11,"1233 Main St., San Luis, AZ 85349",HS (9-12),Grades 9-12,"Town, Distant",Rural,0,
-Queen Creek High School,28,"22149 E Ocotillo Rd, Queen Creek, AZ 85142",HS (9-12),Grades 9-12,"Suburb, Large",Urban,1,
-Queen Creek Middle School,29,"20435 S. Old Ellsworth Rd
-Queen Creek, AZ 85142",JHS,Grades 6-8,"Suburb, Large",Urban,1,
-Reyes Maria Ruiz Leadership Academy,30,"4848 S. 2nd St., Phoenix AZ, 85040",ES,Grades 1-5 ,"City, Large",Urban,1,
-Saguaro High School,31,"6250 N 82nd St.
-Scottsdale, AZ 85250",HS,Grades 9-12,"City, Midsize",Urban,1,
-San Manuel High School,32," 711 S McNab Pkwy, San Manuel, AZ 85631",HS,Grades 9-12,"Rural, Fringe",Rural,0,Fully in rural fringe but very close to distant town
-Solano Elementary School,33,"1526 W Missouri Ave, Phoenix, AZ 85015",ES (K-6),Grades 1-5,"City, Large",Urban,1,
-Southgate Academy High School,34,"850 W Valencia Rd, Tucson, AZ 85706",HS,Grades 9-12,"City, Large",Urban,1,
-St. Vincent de Paul,35,3130 N 51st Ave Phoenix AZ 85031,"PS, ES, & JHS (Pre-K- 8)",Grades 6-8,"City, Large",Urban,1,
-Yuma High School,37,"400 S 6th Ave, Yuma, AZ 85364",HS,Grades 9-12,"City, Small",Urban,1,
+School Name,urban=1,Address,"ES, JHS, or HS?",Grade Level Under Study,Locale Type,Locale class Rural or Urban?,Percent Rural,RUCA,RUCC,NCES Code,"Code- Rural ""0"" or Urban ""1""?",Notes
+High Desert Middle School,18,"4000 High Desert Dr, Globe, AZ 85501",JHS (6-8),Grades 6-8,"Rural, Fringe",Rural,41.06,4,4,41,0,
+Beaver Creek Elementary,6,"810 E Beaver Creek Rd. Rimrock, AZ 86335 6241",ES and JHS,Grades 1-5,"Town, Distant",Rural,33.2,7,3,41,0,in a fringe town area though
+Franklin Phonetic School,15,"6116 AZ-69, Prescott Valley, AZ 86314",ES & JHS (K-8),Grades 1-5,"Suburb, Small",Urban,33.2,1,3,13,1,
+AZ City Elementary,1,"3315 N. Toltec Rd. Eloy, AZ 85131",ES,Grades 1-5,"Rural, Fringe",Rural,21.9,2,1,41,0,was town fringe with school name
+Eloy Junior High School,14,"404 East Phoenix Ave., Eloy, AZ 85131",JHS,Grades 6-8,"Town, Fringe",Rural,21.9,2,1,41,0,"appears half rural/town fringe; went to 100% transparency to determine whether school is town or rural, it appears that school belongs to town community so leaned fringe town"
+Leading Edge Maricopa,20,"18700 N Porter Rd, Maricopa, AZ 85138",ES & JHS (K-8),Grades 1-5,"Town, Distant",Rural,21.9,2,1,32,0,
+Magma Ranch Middle School,22,"10980 E. Desert Mountain Boulevard, Florence, AZ 85132",ES & JHS (K-8),Grades 6-8,"Rural, Fringe",Rural,21.9,2,1,41,0,
+San Manuel High School,32," 711 S McNab Pkwy, San Manuel, AZ 85631",HS,Grades 9-12,"Rural, Fringe",Rural,21.9,2,1,41,0,Fully in rural fringe but very close to distant town
+Gila Ridge High School,17,"7150 E 24th St, Yuma, AZ 85365",HS (9-12),Grades 9-12,"Rural, Fringe",Rural,10.43,1,3,41,0,"Fully in rural fringe, but surrounding area is small city"
+Cesar Chavez High School,11,"1233 Main St., San Luis, AZ 85349",HS (9-12),Grades 9-12,"Town, Distant",Rural,10.43,2,3,32,0,
+Yuma High School,37,"400 S 6th Ave, Yuma, AZ 85364",HS,Grades 9-12,"City, Small",Urban,10.43,1,3,13,1,
+Alice Vail Middle School,5,"5350 E 16th St. Tucson, AZ 85711 4404",JHS (6-8),Grades 6-8 ,"City, Large",Urban,7.52,1,2,11,1,
+Toltecalli High School,36,"251 W. Irvington Rd., Tucson, AZ 85714",HS (9-12),Grades 9-12,"City, Large",Urban,7.52,1,2,11,1,
+Southgate Academy High School,34,"850 W Valencia Rd, Tucson, AZ 85706",HS,Grades 9-12,"City, Large",Urban,7.52,1,2,11,1,
+Academia del Pueblo,2,"201 E. Durango St, Phoenix, AZ 85004, USA",ES & JHS,Grades 6-8,"City, Large",Urban,2.36,1,1,11,1,
+Academy of Math and Science(Flower) Middle School,3,"3335 W Flower St, Phoenix, AZ 85017",ES & JHS (K-8),Grades 6-8,"City, Large",Urban,2.36,1,1,11,1,
+Aguilar Elementary,4,"5800 S. Forest Ave., Tempe, AZ 85283",ES,Grades 1-5,"City, Midsize",Urban,2.36,1,1,12,1,
+Black Mountain Elementary,7,"33606 N. 60th Street, Scottsdale, AZ, 85266",ES (K-6),Grades 1-5,"City, Midsize",Urban,2.36,1,1,12,1,
+Broadmor Elementary School,8,"311 E Aepli Dr., Tempe, AZ 85282 2205",ES,Grades 1-5,"City, Midsize",Urban,2.36,1,1,12,1,
+Cactus Shadows High School,9,"5802 East Dove Valley Road, Scottsdale, AZ 85266",HS,Grades 9-12,"City, Midsize",Urban,2.36,1,1,12,1,"split in middle it appears with address, but with typing In school name more clear-midsize city"
+Camelback Academy,10,7634 W Camelback Rd Glendale AZ 85303,ES,Grades 1-5,"Suburb, Large",Urban,2.36,1,1,21,1,
+Coronado High School,12,"7501 E. Virginia Ave. Scottsdale, AZ 85257 ",HS,Grades 9-12,"City, Midsize",Urban,2.36,1,1,12,1,
+EAGLE Prep,13,"2450 W. South Mountain Ave. Phoenix, AZ 85041 7601",ES & JHS(K-8),Grade 1-5,"City, Large",Urban,2.36,1,1,11,1,
+GateWay Early College High School,16,"108 N 40th St, Phoenix, AZ 85034",HS (9-12),Grades 9-12,"City, Large",Urban,2.36,1,1,11,1,
+Isaac Middle School,19,"3402 W McDowell Rd, Phoenix, AZ 85009",JHS (6-8),Grades 6-8,"City, Large",Urban,2.36,1,1,11,1,
+Madison Meadows Middle School,21,"225 W. Ocotillo Rd., Phoenix, AZ 85013",JHS,Grades 6-8,"City, Large",Urban,2.36,1,1,11,1,
+Paideia Academy,23,"7777 S 15th Terrace, Phoenix, AZ 85042",ES,Grades 1-5,"City, Large",Urban,2.36,1,1,11,1,
+Pan-American High School,25,"2020 W Indian School Rd, Phoenix, AZ 85015",JHS & HS (7- 12(,Grades 9-12,"City, Large",Urban,2.36,1,1,11,1,
+Pan-American Elementary School,24,"3001 W Indian School Rd, Phoenix, AZ 85017",ES (3-6) for this campus,Grades 3-5,"City, Large",Urban,2.36,1,1,11,1,
+Payne Junior High School,26,"7655 S. Higley Rd. Queen Creek, AZ 85142",JHS (7-8),Grades 7-8,"Suburb, Large",Urban,2.36,1,1,21,1,
+Pensar Academy Middle School,27,"6135 N. Black Canyon Highway, Phoenix, AZ 85015",ES & JHS (4-8),Grades 6-8,"City, Large",Urban,2.36,1,1,11,1,
+Queen Creek High School,28,"22149 E Ocotillo Rd, Queen Creek, AZ 85142",HS (9-12),Grades 9-12,"Suburb, Large",Urban,2.36,1,1,21,1,
+Queen Creek Middle School,29,"20435 S. Old Ellsworth Rd, Queen Creek, AZ 85142",JHS,Grades 6-8,"Suburb, Large",Urban,2.36,1,1,21,1,
+Reyes Maria Ruiz Leadership Academy,30,"4848 S. 2nd St., Phoenix AZ, 85040",ES,Grades 1-5 ,"City, Large",Urban,2.36,1,1,11,1,
+Saguaro High School,31,"6250 N 82nd St., Scottsdale, AZ 85250",HS,Grades 9-12,"City, Midsize",Urban,2.36,1,1,12,1,
+Solano Elementary School,33,"1526 W Missouri Ave, Phoenix, AZ 85015",ES (K-6),Grades 1-5,"City, Large",Urban,2.36,1,1,11,1,
+St. Vincent de Paul,35,3130 N 51st Ave Phoenix AZ 85031,"PS, ES, & JHS (Pre-K- 8)",Grades 6-8,"City, Large",Urban,2.36,1,1,11,1,

@@ -21,9 +21,8 @@
 #
 # source('functions.R')
 # library(haven)
-# library(sjlabelled)
-# library(reshape2)
-# library(psycho)
+# library(lubridate)
+
 
 #### Demographics ####
 
@@ -32,12 +31,14 @@ salad_bar_dat <- as.data.frame(read_spss("data/BL_elem_middle_high_wave1_wide_co
 
 names(salad_bar_dat)[16:18] <- c('fv_pre', 'fv_post', 'fv_consumed')
 
+#note - all pre < post have been zeroed out in fv_consumed
+#salad_bar_dat[salad_bar_dat[['fv_pre']] < salad_bar_dat[['fv_post']], 'fv_consumed']
+
 # make slected variable
 salad_bar_dat[['fv_selected']] <- ifelse(salad_bar_dat[['fv_pre']] > 0, 'Y', 'N')
-salad_bar_dat[['fv_prop_waste']] <- (salad_bar_dat[['fv_post']]/salad_bar_dat[['fv_pre']])*100
 
-# ensure all exclusion for weights are made
-salad_bar_dat[['fv_exclude']] <- ifelse(salad_bar_dat[['fv_pre']] < salad_bar_dat[['fv_post']], 'Y', 'N')
+#since pre < post was only zeroed for fv_consumed need to use fv_consumed to compute
+salad_bar_dat[['fv_prop_waste']] <- ((salad_bar_dat[['fv_pre']] - salad_bar_dat[['fv_consumed']])/salad_bar_dat[['fv_pre']])*100
 
 # fix NAs
 salad_bar_dat[['gender']] <- ifelse(salad_bar_dat[['gender']] == 'NULL', NA, as.character(salad_bar_dat[['gender']]))
@@ -63,30 +64,25 @@ salad_bar_dat[['race_ethnicity']] <- factor(salad_bar_dat[['race_ethnicity']], l
 
 ## Load in rurality table ####
 rural_dat <- read.csv('data/Rural-Urban School Coding.csv')
-names(rural_dat)[c(1, 7, 6)] <- c('school_name', 'rurality', 'suburb') 
+names(rural_dat)[c(1, 7:8, 6)] <- c('school_name', 'rural2', 'p_rural', 'rurality') 
+
+rural_dat[['rurality']] <- ifelse(rural_dat[['rurality']] == 'Suburb, Small' | rural_dat[['rurality']] == 'Suburb, Large', 'Suburb', as.character(rural_dat[['rural2']]))
 
 # merge classification
-salad_bar_dat <- merge(salad_bar_dat, rural_dat[c(1, 7, 6)], by = 'school_name', all.x = TRUE)
+salad_bar_dat <- merge(salad_bar_dat, rural_dat[c(1, 6, 8)], by = 'school_name', all.x = TRUE)
 
-salad_bar_dat[['rurality']] <- factor(salad_bar_dat[['rurality']], levels = c('Urban', 'Rural'))
+salad_bar_dat[['rurality']] <- factor(salad_bar_dat[['rurality']], levels = c('Rural', 'Suburb', 'Urban'))
 
-salad_bar_dat[['suburb']] <- ifelse(salad_bar_dat[['suburb']] == 'Suburb, Small' | salad_bar_dat[['suburb']] == 'Suburb, Large', 'Y', 'N')
+# Time to Eat Data
+salad_bar_tte <- read.csv("data/BL_elem_middle_high_wave1_wide_complete_cases_clean_2023-03-03_deidentified_TTE.csv", na.strings = '#N/A')
 
-# Time to Eat
-salad_bar_tte <- as.data.frame(read_spss("data/BL_elem_middle_high_wave1_wide_complete_cases_clean_2023-03-03_deidentified_TTE.sav"))
-
-names(salad_bar_tte)[76] <- 'time_to_eat'
-
-salad_bar_tte$LunchPeriodStart_parsed <- parse_date_time(salad_bar_tte$LunchPeriodStart, '%I:%M:%S %p')
-salad_bar_tte$LunchPeriodEnd_parsed <- parse_date_time(salad_bar_tte$LunchPeriodEnd, '%I:%M:%S %p')
-
-salad_bar_tte$lunch_dur <- time_length(salad_bar_tte$LunchPeriodEnd_parsed - salad_bar_tte$LunchPeriodStart_parsed, unit = 'min')
-
-salad_bar_tte$time_to_eat <- time_length(hms(salad_bar_tte$time_to_eat), unit = 'min')
+# run lunch/tte error fix
+source('setup-lunch_tte_fix.R')
 
 # merge tte
-salad_bar_dat <- merge(salad_bar_dat, salad_bar_tte[c(11, 76, 80)], by = 'randomized_student_id', all.x = TRUE)
+salad_bar_dat <- merge(salad_bar_dat, salad_bar_tte[c(11, 78:85)], by = 'randomized_student_id', all.x = TRUE)
 
 salad_bar_dat$tte_dat <- ifelse(is.na(salad_bar_dat$time_to_eat), 'Missing', 'Complete')
 
-salad_bar_dat_use <- salad_bar_dat[salad_bar_dat[['fv_exclude']] == 'N' & salad_bar_dat[['tte_dat']] == 'Complete' & !is.na(salad_bar_dat[['fv_pre']]) & !is.na(salad_bar_dat[['fv_post']]), ]
+
+salad_bar_dat$fv_consumed_cat <- ifelse(salad_bar_dat$fv_consumed > 0, 'Y', 'N')
