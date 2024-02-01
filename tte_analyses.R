@@ -28,24 +28,24 @@
 
 ## reduced to usable data ####
 
-# check tte
-salad_bar_dat$tte_extra <- salad_bar_dat[['time_to_eat']] - salad_bar_dat[['lunch_dur']]
-
-# Quality Checks:
-salad_bar_dat$assent_dif <- time_length(salad_bar_dat$lunch_start - salad_bar_dat$assent_time, unit = 'min')
-salad_bar_dat$exit_dif <- time_length(salad_bar_dat$lunch_end - salad_bar_dat$exit_time, unit = 'min')
-salad_bar_dat$scan_dif <- time_length(salad_bar_dat$exit_time - salad_bar_dat$assent_time, unit = 'min')
-salad_bar_dat$assent_pict_dif <- time_length(salad_bar_dat$pre_photo - salad_bar_dat$assent_time, unit = 'min')
-salad_bar_dat$pict_exit_dif <- time_length(salad_bar_dat$exit_time - salad_bar_dat$pre_photo, unit = 'min')
-
+# # check tte
+# salad_bar_dat$tte_extra <- salad_bar_dat[['time_to_eat']] - salad_bar_dat[['lunch_dur']]
+# 
+# # Quality Checks:
+# salad_bar_dat$assent_dif <- time_length(salad_bar_dat$lunch_start - salad_bar_dat$assent_time, unit = 'min')
+# salad_bar_dat$exit_dif <- time_length(salad_bar_dat$lunch_end - salad_bar_dat$exit_time, unit = 'min')
+# salad_bar_dat$scan_dif <- time_length(salad_bar_dat$exit_time - salad_bar_dat$assent_time, unit = 'min')
+# salad_bar_dat$assent_pict_dif <- time_length(salad_bar_dat$pre_photo - salad_bar_dat$assent_time, unit = 'min')
+# salad_bar_dat$pict_exit_dif <- time_length(salad_bar_dat$exit_time - salad_bar_dat$pre_photo, unit = 'min')
+# 
 
 ## reduce to complete data
 salad_bar_dat_use <- salad_bar_dat[!is.na(salad_bar_dat[['fv_pre']]) & !is.na(salad_bar_dat[['fv_post']]) & salad_bar_dat[['time_to_eat']] >= 0, ]
 
 salad_bar_dat_use <- salad_bar_dat_use[!is.na(salad_bar_dat_use[['gender']]) & !is.na(salad_bar_dat_use[["race_ethnicity"]]) & !is.na(salad_bar_dat_use[["grade"]]) & !is.na(salad_bar_dat_use[["paid_free_reduced"]]) & !is.na(salad_bar_dat_use[["lunch_dur"]]), ]
 
-nrow(salad_bar_dat_use[salad_bar_dat_use$time_to_eat > salad_bar_dat_use$lunch_dur, ])
-#47
+#nrow(salad_bar_dat_use[salad_bar_dat_use$time_to_eat > salad_bar_dat_use$lunch_dur, ])
+#49
 
 ## Demo ###
 
@@ -68,13 +68,17 @@ fv_selected_chi <- chisq.test(xtabs(~school_type + fv_selected, data = salad_bar
 
 ## lunch duration
 lunch_dur_mod <- lmer(lunch_dur~school_type + (1|school_name), data = salad_bar_dat_use)
-lunch_dur_anova <- anova(lunch_dur_mod, test.statistic = 'F')
+lunch_dur_anova <- Anova(lunch_dur_mod, test.statistic = 'F')
 lunch_dur_emmeans <- emmeans(lunch_dur_mod, pairwise ~ school_type)
 
 ## time to eat
 tte_mod <- lmer(time_to_eat~school_type + (1|school_name), data = salad_bar_dat_use)
 tte_anova <- Anova(tte_mod, type = 3, test.statistic = 'F')
 tte_emmeans <- emmeans(tte_mod, pairwise ~ school_type)
+
+## correlation
+cor.test(salad_bar_dat_use[['time_to_eat']], salad_bar_dat_use[['lunch_dur']], na.rm = TRUE)
+
 
 ## fv selected g
 fv_pre_mod <- lmer(fv_pre~school_type + (1|school_name), data = salad_bar_dat_use[salad_bar_dat_use$fv_selected == 'Y', ])

@@ -83,10 +83,6 @@ salad_bar_dat[!is.na(salad_bar_dat[['time_to_eat']]) &salad_bar_dat[['time_to_ea
 \clearpage
 
 ## Follow-up Tests by School Type
-\
-Total Sample Sizes: Full N = 2226, Elementary N = 630, Middle School N = 699, High School N = 897
-
-\
 \FloatBarrier
 
 ### gender
@@ -281,7 +277,7 @@ fv_consumed_sum
 ### IRR
 
 ```{r fv_consumed_irr, echo=FALSE, asis = TRUE}
-as.matrix(exp(fv_consumed_sum$coef_table_zi[ ,1]), nrow = 9)
+as.matrix(exp(fv_consumed_sum$coef_table[ ,1]), nrow = 9)
 ```
 
 \FloatBarrier
@@ -289,7 +285,7 @@ as.matrix(exp(fv_consumed_sum$coef_table_zi[ ,1]), nrow = 9)
 ### OR
 
 ```{r fv_consumed_or, echo=FALSE}
-as.matrix(exp(fv_consumed_sum$coef_table[ ,1]), nrow = 9)
+as.matrix(exp(fv_consumed_sum$coef_table_zi[ ,1]), nrow = 9)
 ```
 
 \FloatBarrier
@@ -323,7 +319,7 @@ fv_consumed_ES_sum
 ### IRR
 
 ```{r fv_consumed_ES_irr, echo=FALSE, asis = TRUE}
-as.matrix(exp(fv_consumed_ES_sum$coef_table_zi[ ,1]), nrow = 9)
+as.matrix(exp(fv_consumed_ES_sum$coef_table[ ,1]), nrow = 9)
 ```
 
 \FloatBarrier
@@ -331,7 +327,7 @@ as.matrix(exp(fv_consumed_ES_sum$coef_table_zi[ ,1]), nrow = 9)
 ### OR
 
 ```{r fv_consumed_ES_or, echo=FALSE}
-as.matrix(exp(fv_consumed_ES_sum$coef_table[ ,1]), nrow = 9)
+as.matrix(exp(fv_consumed_ES_sum$coef_table_zi[ ,1]), nrow = 9)
 ```
 
 \FloatBarrier
@@ -364,7 +360,7 @@ fv_consumed_MS_sum
 ### IRR
 
 ```{r fv_consumed_MS_irr, echo=FALSE, asis = TRUE}
-as.matrix(exp(fv_consumed_MS_sum$coef_table_zi[ ,1]), nrow = 9)
+as.matrix(exp(fv_consumed_MS_sum$coef_table[ ,1]), nrow = 9)
 ```
 
 \FloatBarrier
@@ -372,7 +368,7 @@ as.matrix(exp(fv_consumed_MS_sum$coef_table_zi[ ,1]), nrow = 9)
 ### OR
 
 ```{r fv_consumed_MS_or, echo=FALSE}
-as.matrix(exp(fv_consumed_MS_sum$coef_table[ ,1]), nrow = 9)
+as.matrix(exp(fv_consumed_MS_sum$coef_table_zi[ ,1]), nrow = 9)
 ```
 
 \FloatBarrier
@@ -405,7 +401,7 @@ fv_consumed_HS_sum
 ### IRR
 
 ```{r fv_consumed_HS_irr, echo=FALSE, asis = TRUE}
-as.matrix(exp(fv_consumed_HS_sum$coef_table_zi[ ,1]), nrow = 9)
+as.matrix(exp(fv_consumed_HS_sum$coef_table[ ,1]), nrow = 9)
 ```
 
 \FloatBarrier
@@ -413,7 +409,7 @@ as.matrix(exp(fv_consumed_HS_sum$coef_table_zi[ ,1]), nrow = 9)
 ### OR
 
 ```{r fv_consumed_HS_or, echo=FALSE}
-as.matrix(exp(fv_consumed_HS_sum$coef_table[ ,1]), nrow = 9)
+as.matrix(exp(fv_consumed_HS_sum$coef_table_zi[ ,1]), nrow = 9)
 ```
 
 \FloatBarrier
@@ -447,7 +443,7 @@ fv_prop_waste_sum
 ### IRR
 
 ```{r fv_prop_waste_irr, echo=FALSE, asis = TRUE}
-as.matrix(exp(fv_prop_waste_sum$coef_table_zi[ ,1]), nrow = 9)
+as.matrix(exp(fv_prop_waste_sum$coef_table[ ,1]), nrow = 9)
 ```
 
 \FloatBarrier
@@ -455,7 +451,7 @@ as.matrix(exp(fv_prop_waste_sum$coef_table_zi[ ,1]), nrow = 9)
 ### OR
 
 ```{r fv_prop_waste_or, echo=FALSE}
-as.matrix(exp(fv_prop_waste_sum$coef_table[ ,1]), nrow = 9)
+as.matrix(exp(fv_prop_waste_sum$coef_table_zi[ ,1]), nrow = 9)
 ```
 
 \FloatBarrier
@@ -488,7 +484,7 @@ fv_prop_waste_ES_sum
 ### IRR
 
 ```{r fv_prop_waste_ES_irr, echo=FALSE, asis = TRUE}
-as.matrix(exp(fv_prop_waste_ES_sum$coef_table_zi[ ,1]), nrow = 9)
+as.matrix(exp(fv_prop_waste_ES_sum$coef_table[ ,1]), nrow = 9)
 ```
 
 \FloatBarrier
@@ -496,7 +492,7 @@ as.matrix(exp(fv_prop_waste_ES_sum$coef_table_zi[ ,1]), nrow = 9)
 ### OR
 
 ```{r fv_prop_waste_ES_or, echo=FALSE}
-as.matrix(exp(fv_prop_waste_ES_sum$coef_table[ ,1]), nrow = 9)
+as.matrix(exp(fv_prop_waste_ES_sum$coef_table_zi[ ,1]), nrow = 9)
 ```
 
 \FloatBarrier
@@ -530,7 +526,7 @@ fv_prop_waste_MS_sum
 ### IRR
 
 ```{r fv_prop_waste_MS_irr, echo=FALSE, asis = TRUE}
-as.matrix(exp(fv_prop_waste_MS_sum$coef_table_zi[ ,1]), nrow = 9)
+as.matrix(exp(fv_prop_waste_MS_sum$coef_table[ ,1]), nrow = 9)
 ```
 
 \FloatBarrier
@@ -538,7 +534,7 @@ as.matrix(exp(fv_prop_waste_MS_sum$coef_table_zi[ ,1]), nrow = 9)
 ### OR
 
 ```{r fv_prop_waste_MS_or, echo=FALSE}
-as.matrix(exp(fv_prop_waste_mS_sum$coef_table[ ,1]), nrow = 9)
+as.matrix(exp(fv_prop_waste_MS_sum$coef_table_zi[ ,1]), nrow = 9)
 ```
 
 \FloatBarrier
@@ -571,7 +567,7 @@ fv_prop_waste_HS_sum
 ### IRR
 
 ```{r fv_prop_waste_HS_irr, echo=FALSE, asis = TRUE}
-as.matrix(exp(fv_prop_waste_HS_sum$coef_table_zi[ ,1]), nrow = 9)
+as.matrix(exp(fv_prop_waste_HS_sum$coef_table[ ,1]), nrow = 9)
 ```
 
 \FloatBarrier
@@ -579,7 +575,7 @@ as.matrix(exp(fv_prop_waste_HS_sum$coef_table_zi[ ,1]), nrow = 9)
 ### OR
 
 ```{r fv_prop_waste_HS_or, echo=FALSE}
-as.matrix(exp(fv_prop_waste_HS_sum$coef_table[ ,1]), nrow = 9)
+as.matrix(exp(fv_prop_waste_HS_sum$coef_table_zi[ ,1]), nrow = 9)
 ```
 
 \FloatBarrier

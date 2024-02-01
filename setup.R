@@ -77,6 +77,7 @@ salad_bar_dat[['rurality']] <- factor(salad_bar_dat[['rurality']], levels = c('R
 salad_bar_tte <- read.csv("data/BL_elem_middle_high_wave1_wide_complete_cases_clean_2023-03-03_deidentified_TTE.csv", na.strings = '#N/A')
 
 # run lunch/tte error fix
+source('setup-scantimes_fix.R')
 source('setup-lunch_tte_fix.R')
 
 # merge tte
