@@ -66,7 +66,7 @@ source('rurality_tables.R')
 # Demographic Characteristics
 
 ```{r demo_tab, echo=FALSE, results='asis'}
-  as_kable_extra(overall_table_rural, caption = 'Demographic Characteristics', format = "latex", booktabs = TRUE, longtable = FALSE) %>%
+  as_kable_extra(overall_table_rural2, caption = 'Demographic Characteristics', format = "latex", booktabs = TRUE, longtable = FALSE) %>%
   kableExtra::kable_styling(latex_options = "HOLD_position",  full_width = FALSE)
 ```
 
@@ -80,28 +80,26 @@ gender_chi
 
 ## age
 ```{r demo_age, echo=FALSE}
-age_anova
-age_emmeans
+age_ttest
 ```
 
 ## grade
 ```{r demo_grade, echo=FALSE}
-grade_anova
-grade_emmeans
+grade_ttest
 ```
 
 ## race/ethnicity
 ```{r demo_race, echo=FALSE}
 raceethnicity_chi
 
-xtabs(~rurality + race_ethnicity, data = salad_bar_dat_use)
+xtabs(~rurality2 + race_ethnicity, data = salad_bar_dat_use)
 ```
 
 ## free-reduced lunch
 ```{r demo_frl, echo=FALSE}
 frl_chi
 
-xtabs(~rurality + paid_free_reduced, data = salad_bar_dat_use)
+xtabs(~rurality2 + paid_free_reduced, data = salad_bar_dat_use)
 ```
 
 ## fruit/veg selected
@@ -139,11 +137,11 @@ fv_prop_waste_emmeans
 \FloatBarrier
 \clearpage
 
-# Rurality Models
+# Rurality Models - 2 category
 
 ## Fruit/Vegetable Self-Served
 
-```{r fv_pre_plot, echo=FALSE, include = TRUE}
+```{r fv_pre_plot2, echo=FALSE, include = TRUE}
 hist(salad_bar_dat_use[['fv_pre']])
 ```
 
@@ -151,7 +149,7 @@ hist(salad_bar_dat_use[['fv_pre']])
 
 -mean and sd for participants that selected F/V
 
-```{r fv_pre_mean, echo=FALSE}
+```{r fv_pre_mean2, echo=FALSE}
 mean(salad_bar_dat_use[salad_bar_dat_use[['fv_pre']] > 0, 'fv_pre'], na.rm = TRUE)
 
 sd(salad_bar_dat_use[salad_bar_dat_use[['fv_pre']] > 0, 'fv_pre'], na.rm = TRUE)
@@ -159,86 +157,114 @@ sd(salad_bar_dat_use[salad_bar_dat_use[['fv_pre']] > 0, 'fv_pre'], na.rm = TRUE)
 
 \FloatBarrier
 
-### Interaction model
-
-```{r fv_pre_int_mod, echo=FALSE}
-fv_served_int_sum
-```
-
-\FloatBarrier
-
-#### IRR
-
-```{r fv_pre_int_irr, echo=FALSE, asis = TRUE}
-as.matrix(exp(fv_served_int_sum$coef_table[ ,1]), nrow = 10)
-```
-
-\FloatBarrier
-
-#### OR
-
-```{r fv_pre_int_or, echo=FALSE}
-as.matrix(exp(fv_served_int_sum$coef_table_zi[ ,1]), nrow = 10)
-```
-
-\FloatBarrier
 
 ### Overall model
 
-```{r fv_pre_mod, echo=FALSE}
-fv_served_sum
+```{r fv_pre_mod2, echo=FALSE}
+fv_served_sum2
 ```
 
 \FloatBarrier
 
-#### IRR
+#### irr
 
-```{r fv_pre_irr, echo=FALSE, asis = TRUE}
-as.matrix(exp(fv_served_sum$coef_table[ ,1]), nrow = 10)
+```{r fv_pre_irr2, echo=FALSE, asis = TRUE}
+as.matrix(exp(fv_served_sum2$coef_table[ ,1]), nrow = 9, round = 3)
 ```
 
 \FloatBarrier
 
-#### OR
+#### or
 
-```{r fv_pre_or, echo=FALSE}
-as.matrix(exp(fv_served_sum$coef_table_zi[ ,1]), nrow = 10)
+```{r fv_pre_or2, echo=FALSE}
+as.matrix(exp(fv_served_sum2$coef_table_zi[ ,1]), nrow = 9, round = 3)
 ```
 
 \FloatBarrier
 \clearpage
 
+<!-- ### Rurality x School Level -->
+
+<!-- ```{r fv_pre_int_mod2, echo=FALSE} -->
+<!-- fv_served_int_sum2 -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### irr -->
+
+<!-- ```{r fv_pre_int_irr2, echo=FALSE, asis = TRUE} -->
+<!-- as.matrix(exp(fv_served_int_sum2$coef_table[ ,1]), nrow = 16) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### or -->
+
+<!-- ```{r fv_pre_int_or2, echo=FALSE} -->
+<!-- as.matrix(exp(fv_served_int_sum2$coef_table_zi[ ,1]), nrow = 16) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
 ### Rurality x Gender
 
-```{r fv_pre_gender_mod, echo=FALSE}
-fv_served_gender_sum
-```
-
-Count Model: there is a significant interaction between Rural and Suburban schools and gender for amount of F/V selected among those who selected F/V. There is no significant effect of gender on selection for rural schools and no difference in the effect of gender on selection between rural and urban schools. However, males at suburban schools will select an average of 14% fewer g of F/V compared to females. This equates to males in suburban schools selecting 16 g fewer F/V than females compared to only 2 grams fewer in rural schools and 1 fewer g at urban schools (estimated from adjusted marginal means - see below).
-
-Zero Model: there is a significant interaction between rurality of school and gender for selection 0 g of F/V. While there is no gender difference in the odds of selecting 0 g of F/V at rural schools, males at suburban and urban schools are 77% and 44% more likely to select 0 g of F/V, respectively, than females. 
-
-\FloatBarrier
-
-#### Count Model Marginal Means
-```{r fv_pre_gender_fix_emm, echo=FALSE, asis = TRUE}
-fv_served_gender_fixed_emm
+```{r fv_pre_gender_mod2, echo=FALSE}
+fv_served_gender_sum2
 ```
 
 \FloatBarrier
 
-#### IRR
-
-```{r fv_pre_gender_irr, echo=FALSE, asis = TRUE}
-as.matrix(exp(fv_served_gender_sum$coef_table[ ,1]), nrow = 9)
+#### Zero model Marginal means
+```{r fv_pre_gender_fix_emt2, echo=FALSE, asis = TRUE}
+fv_served_gender_fixed_emt2
 ```
 
 \FloatBarrier
 
-#### OR
+#### irr
 
-```{r fv_pre_gender_or, echo=FALSE}
-as.matrix(exp(fv_served_gender_sum$coef_table_zi[ ,1]), nrow = 9)
+```{r fv_pre_gender_irr2, echo=FALSE, asis = TRUE}
+as.matrix(exp(fv_served_gender_sum2$coef_table[ ,1]), nrow = 11)
+```
+
+\FloatBarrier
+
+#### or
+
+```{r fv_pre_gender_or2, echo=FALSE}
+as.matrix(exp(fv_served_gender_sum2$coef_table_zi[ ,1]), nrow = 11)
+```
+
+\FloatBarrier
+
+### Rurality x Eating Duration
+
+```{r fv_pre_tte_mod2, echo=FALSE}
+fv_served_tte_sum2
+```
+
+\FloatBarrier
+
+#### irr
+
+```{r fv_pre_tte_irr2, echo=FALSE, asis = TRUE}
+as.matrix(exp(fv_served_tte_sum2$coef_table[ ,1]), nrow = 11)
+```
+
+\FloatBarrier
+
+#### Zero model Marginal Slopes
+```{r fv_pre_tte_zi_emt2, echo=FALSE, asis = TRUE}
+fv_served_tte_zi_emt2
+```
+
+\FloatBarrier
+
+#### or
+
+```{r fv_pre_tte_or2, echo=FALSE}
+as.matrix(exp(fv_served_tte_sum2$coef_table_zi[ ,1]), nrow = 11)
 ```
 
 \FloatBarrier
@@ -246,7 +272,7 @@ as.matrix(exp(fv_served_gender_sum$coef_table_zi[ ,1]), nrow = 9)
 
 ## Fruit/Vegetable Consumed
 
-```{r fv_consumed_plot, echo=FALSE, include = TRUE}
+```{r fv_consumed_plot2, echo=FALSE, include = TRUE}
 hist(salad_bar_dat_use[salad_bar_dat_use[['fv_selected']] == 'Y', 'fv_consumed'])
 ```
 
@@ -254,92 +280,123 @@ hist(salad_bar_dat_use[salad_bar_dat_use[['fv_selected']] == 'Y', 'fv_consumed']
 
 -mean and sd for participants that selected F/V and consumed > 0 g F/V
 
-```{r fv_consumed_mean, echo=FALSE, results='asis'}
+```{r fv_consumed_mean2, echo=FALSE, results='asis'}
 mean(salad_bar_dat_use[salad_bar_dat_use[['fv_consumed']] > 0, 'fv_consumed'], na.rm = TRUE)
 sd(salad_bar_dat_use[salad_bar_dat_use[['fv_consumed']] > 0, 'fv_consumed'], na.rm = TRUE)
 ```
 
 
 \FloatBarrier
-### Interaction Model
 
-```{r fv_consumed_int_mod, echo=FALSE}
-fv_consumed_int_sum
+### Overall model
+
+```{r fv_consumed_mod2, echo=FALSE}
+fv_consumed_sum2
 ```
 
 \FloatBarrier
 
-#### IRR
+#### irr
 
-```{r fv_consumed_int_irr, echo=FALSE, asis = TRUE}
-as.matrix(exp(fv_consumed_int_sum$coef_table[ ,1]), nrow = 9)
+```{r fv_consumed_irr2, echo=FALSE, asis = TRUE}
+as.matrix(exp(fv_consumed_sum2$coef_table[ ,1]), nrow = 10)
 ```
 
 \FloatBarrier
 
-#### OR
+#### or
 
-```{r fv_consumed_int_or, echo=FALSE}
-as.matrix(exp(fv_consumed_int_sum$coef_table_zi[ ,1]), nrow = 9)
+```{r fv_consumed_or2, echo=FALSE}
+as.matrix(exp(fv_consumed_sum2$coef_table_zi[ ,1]), nrow = 10)
 ```
 
 \FloatBarrier
 
-### Overall Model
+<!-- ### Rurality x School Level -->
 
-```{r fv_consumed_mod, echo=FALSE}
-fv_consumed_sum
-```
+<!-- ```{r fv_consumed_int_mod2, echo=FALSE} -->
+<!-- fv_consumed_int_sum2 -->
+<!-- ``` -->
 
-\FloatBarrier
+<!-- \FloatBarrier -->
 
-#### IRR
+<!-- #### irr -->
 
-```{r fv_consumed_irr, echo=FALSE, asis = TRUE}
-as.matrix(exp(fv_consumed_sum$coef_table[ ,1]), nrow = 9)
-```
+<!-- ```{r fv_consumed_int_irr2, echo=FALSE, asis = TRUE} -->
+<!-- as.matrix(exp(fv_consumed_int_sum2$coef_table[ ,1]), nrow = 16) -->
+<!-- ``` -->
 
-\FloatBarrier
+<!-- \FloatBarrier -->
 
-#### OR
+<!-- #### or -->
 
-```{r fv_consumed_or, echo=FALSE}
-as.matrix(exp(fv_consumed_sum$coef_table_zi[ ,1]), nrow = 9)
-```
+<!-- ```{r fv_consumed_int_or2, echo=FALSE} -->
+<!-- as.matrix(exp(fv_consumed_int_sum2$coef_table_zi[ ,1]), nrow = 16) -->
+<!-- ``` -->
 
-\FloatBarrier
-\clearpage
+<!-- \FloatBarrier -->
 
 ### Rurality x Gender
 
-```{r fv_consumed_gender_mod, echo=FALSE}
-fv_consumed_gender_sum
+```{r fv_consumed_gender_mod2, echo=FALSE}
+fv_consumed_gender_sum2
 ```
 
 \FloatBarrier
 
-#### IRR
+#### irr
 
-```{r fv_consumed_gender_irr, echo=FALSE, asis = TRUE}
-as.matrix(exp(fv_consumed_gender_sum$coef_table[ ,1]), nrow = 9)
+```{r fv_consumed_gender_irr2, echo=FALSE, asis = TRUE}
+as.matrix(exp(fv_consumed_gender_sum2$coef_table[ ,1]), nrow = 12)
 ```
 
 \FloatBarrier
 
-#### OR
+#### or
 
-```{r fv_consumed_gender_or, echo=FALSE}
-as.matrix(exp(fv_consumed_gender_sum$coef_table_zi[ ,1]), nrow = 9)
+```{r fv_consumed_gender_or2, echo=FALSE}
+as.matrix(exp(fv_consumed_gender_sum2$coef_table_zi[ ,1]), nrow = 12)
+```
+
+\FloatBarrier
+
+### Rurality x Eating Duration
+
+```{r fv_consumed_tte_mod2, echo=FALSE}
+fv_consumed_tte_sum2
+```
+
+\FloatBarrier
+
+#### irr
+
+```{r fv_consumed_tte_irr2, echo=FALSE, asis = TRUE}
+as.matrix(exp(fv_consumed_tte_sum2$coef_table[ ,1]), nrow = 13)
+```
+
+\FloatBarrier
+
+#### Zero model Marginal Slopes
+```{r fv_consumed_tte_zi_emt2, echo=FALSE, asis = TRUE}
+fv_consumed_tte_zi_emt2
+```
+
+\FloatBarrier
+
+#### or
+
+```{r fv_consumed_tte_or2, echo=FALSE}
+as.matrix(exp(fv_consumed_tte_sum2$coef_table_zi[ ,1]), nrow = 13)
 ```
 
 \FloatBarrier
 \clearpage
 
-## Fruit/Vegetable Proportion Waste
+## Fruit/Vegetable Propor2tion Waste
 
 
 
-```{r fv_prop_waste_plot, echo=FALSE, include = TRUE}
+```{r fv_prop_waste_plot2, echo=FALSE, include = TRUE}
 hist(salad_bar_dat_use[salad_bar_dat_use[['fv_selected']] == 'Y', 'fv_prop_waste'], main = 'Histogram of Percent Fruits/Vegetables Waste, %', xlab = 'Fruit/Vegetables, %')
 ```
 
@@ -347,181 +404,258 @@ hist(salad_bar_dat_use[salad_bar_dat_use[['fv_selected']] == 'Y', 'fv_prop_waste
 
 -mean and sd for participants that selected F/V and consumed > 0 g F/V
 
-```{r fv_prop_waste_mean, echo=FALSE}
+```{r fv_prop_waste_mean2, echo=FALSE}
 mean(salad_bar_dat_use[salad_bar_dat_use$fv_prop_waste < 100 & salad_bar_dat_use$fv_prop_waste > 0 & salad_bar_dat_use$fv_selected == 'Y', 'fv_prop_waste'])
 
 sd(salad_bar_dat_use[salad_bar_dat_use$fv_prop_waste < 100 & salad_bar_dat_use$fv_prop_waste > 0 & salad_bar_dat_use$fv_selected == 'Y', 'fv_prop_waste'])
 ```
 
 \FloatBarrier
-### Interaction Model
 
-```{r fv_prop_waste_int_mod, echo=FALSE}
-fv_prop_waste_int_sum
+### Overall model
+
+```{r fv_prop_waste_mod2, echo=FALSE}
+fv_prop_waste_sum2
 ```
 
 \FloatBarrier
 
-#### IRR
+#### irr
 
-```{r fv_prop_waste_int_irr, echo=FALSE, asis = TRUE}
-as.matrix(exp(fv_prop_waste_int_sum$coef_table[ ,1]), nrow = 9)
+```{r fv_prop_waste_irr2, echo=FALSE, asis = TRUE}
+as.matrix(exp(fv_prop_waste_sum2$coef_table[ ,1]), nrow = 9)
 ```
 
 \FloatBarrier
 
-#### OR
+#### or
 
-```{r fv_prop_waste_int_or, echo=FALSE}
-as.matrix(exp(fv_prop_waste_int_sum$coef_table_zi[ ,1]), nrow = 9)
-```
-
-\FloatBarrier
-
-### Overall Model
-
-```{r fv_prop_waste_mod, echo=FALSE}
-fv_prop_waste_sum
-```
-
-\FloatBarrier
-
-#### IRR
-
-```{r fv_prop_waste_irr, echo=FALSE, asis = TRUE}
-as.matrix(exp(fv_prop_waste_sum$coef_table[ ,1]), nrow = 9)
-```
-
-\FloatBarrier
-
-#### OR
-
-```{r fv_prop_waste_or, echo=FALSE}
-as.matrix(exp(fv_prop_waste_sum$coef_table_zi[ ,1]), nrow = 9)
+```{r fv_prop_waste_or2, echo=FALSE}
+as.matrix(exp(fv_prop_waste_sum2$coef_table_zi[ ,1]), nrow = 9)
 ```
 
 \FloatBarrier
 \clearpage
+
+<!-- ### Rurality x School Level -->
+
+<!-- ```{r fv_prop_waste_int_mod2, echo=FALSE} -->
+<!-- fv_prop_waste_int_sum2 -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### irr -->
+
+<!-- ```{r fv_prop_waste_int_irr2, echo=FALSE, asis = TRUE} -->
+<!-- as.matrix(exp(fv_prop_waste_int_sum2$coef_table[ ,1]), nrow = 9) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### or -->
+
+<!-- ```{r fv_prop_waste_int_or2, echo=FALSE} -->
+<!-- as.matrix(exp(fv_prop_waste_int_sum2$coef_table_zi[ ,1]), nrow = 9) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
 
 ### Rurality x Gender
 
-```{r fv_prop_waste_gender_mod, echo=FALSE}
-fv_prop_waste_gender_sum
+```{r fv_prop_waste_gender_mod2, echo=FALSE}
+fv_prop_waste_gender_sum2
 ```
 
 \FloatBarrier
 
-#### IRR
+#### irr
 
-```{r fv_prop_waste_gender_irr, echo=FALSE, asis = TRUE}
-as.matrix(exp(fv_prop_waste_gender_sum$coef_table[ ,1]), nrow = 9)
+```{r fv_prop_waste_gender_irr2, echo=FALSE, asis = TRUE}
+as.matrix(exp(fv_prop_waste_gender_sum2$coef_table[ ,1]), nrow = 9)
 ```
 
 \FloatBarrier
 
-#### OR
+#### or
 
-```{r fv_prop_waste_gender_or, echo=FALSE}
-as.matrix(exp(fv_prop_waste_gender_sum$coef_table_zi[ ,1]), nrow = 9)
-```
-
-\FloatBarrier
-\clearpage
-
-### Rurality x Grade
-
-```{r fv_prop_waste_grade_mod, echo=FALSE}
-fv_prop_waste_grade_sum
-```
-
-\FloatBarrier
-
-#### IRR
-
-```{r fv_prop_waste_grade_irr, echo=FALSE, asis = TRUE}
-as.matrix(exp(fv_prop_waste_grade_sum$coef_table[ ,1]), nrow = 9)
-```
-
-\FloatBarrier
-
-#### OR
-
-```{r fv_prop_waste_grade_or, echo=FALSE}
-as.matrix(exp(fv_prop_waste_grade_sum$coef_table_zi[ ,1]), nrow = 9)
+```{r fv_prop_waste_gender_or2, echo=FALSE}
+as.matrix(exp(fv_prop_waste_gender_sum2$coef_table_zi[ ,1]), nrow = 9)
 ```
 
 \FloatBarrier
 \clearpage
 
-<!-- # Supplement - by school -->
+### Rurality x Eating Duration
+
+```{r fv_prop_waste_tte_mod2, echo=FALSE}
+fv_prop_waste_tte_sum2
+```
+
+\FloatBarrier
+
+#### Count model Marginal Slopes
+```{r fv_prop_waste_tte_fixed_emm2, echo=FALSE, asis = TRUE}
+fv_prop_waste_tte_fixed_emm2
+```
+
+\FloatBarrier
+
+#### irr
+
+```{r fv_prop_waste_tte_irr2, echo=FALSE, asis = TRUE}
+as.matrix(exp(fv_prop_waste_tte_sum2$coef_table[ ,1]), nrow = 13)
+```
+
+\FloatBarrier
+
+#### or
+
+```{r fv_prop_waste_tte_or2, echo=FALSE}
+as.matrix(exp(fv_prop_waste_tte_sum2$coef_table_zi[ ,1]), nrow = 13)
+```
+
+\FloatBarrier
+\clearpage
+
+<!-- # Rurality Models - 3 category -->
+
+<!-- ## Demographic Characteristics -->
+
+<!-- ```{r demo_tab_3cat, echo=FALSE, results='asis'} -->
+<!--   as_kable_extra(overall_table_rural, caption = 'Demographic Characteristics', format = "latex", booktabs = TRUE, longtable = FALSE) %>% -->
+<!--   kableExtra::kable_styling(latex_options = "HOLD_position",  full_width = FALSE) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+<!-- \clearpage -->
 
 <!-- ## Fruit/Vegetable Self-Served -->
 
-<!-- ### Elementary School -->
-
-<!-- ```{r fv_pre_ES_plot, echo=FALSE, include = TRUE} -->
-<!-- hist(salad_bar_dat_use[salad_bar_dat_use['fv_selected'] == 'Y' & salad_bar_dat_use['school_type'] == 'Elementary', 'fv_pre'], main = 'Histogram of Fruits/Vegetables Selected, g', xlab = 'Fruit/Vegetables, g') -->
+<!-- ```{r fv_pre_plot, echo=FALSE, include = TRUE} -->
+<!-- hist(salad_bar_dat_use[['fv_pre']]) -->
 <!-- ``` -->
 
 <!-- \FloatBarrier -->
 
-<!-- ```{r fv_pre_ES_mean, echo=FALSE} -->
-<!-- mean(salad_bar_dat_use[salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$school_type == 'Elementary', 'fv_pre']) -->
+<!-- -mean and sd for participants that selected F/V -->
 
-<!-- sd(salad_bar_dat_use[salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$school_type == 'Elementary', 'fv_pre']) -->
+<!-- ```{r fv_pre_mean, echo=FALSE} -->
+<!-- mean(salad_bar_dat_use[salad_bar_dat_use[['fv_pre']] > 0, 'fv_pre'], na.rm = TRUE) -->
+
+<!-- sd(salad_bar_dat_use[salad_bar_dat_use[['fv_pre']] > 0, 'fv_pre'], na.rm = TRUE) -->
 <!-- ``` -->
 
 <!-- \FloatBarrier -->
 
-<!-- ```{r fv_pre_ES_mod, echo=FALSE} -->
-<!-- fv_served_ES_sum -->
-<!-- ``` -->
 
-<!-- \FloatBarrier -->
-<!-- \clearpage -->
+<!-- ### Overall model -->
 
-<!-- ### Middle School -->
-
-<!-- ```{r fv_pre_MS_plot, echo=FALSE, include = TRUE} -->
-<!-- hist(salad_bar_dat_use[salad_bar_dat_use['fv_selected'] == 'Y' & salad_bar_dat_use['school_type'] == 'Middle School', 'fv_pre'], main = 'Histogram of Fruits/Vegetables Selected, g', xlab = 'Fruit/Vegetables, g') -->
+<!-- ```{r fv_pre_mod, echo=FALSE} -->
+<!-- fv_served_sum -->
 <!-- ``` -->
 
 <!-- \FloatBarrier -->
 
-<!-- ```{r fv_pre_MS_mean, echo=FALSE} -->
-<!-- mean(salad_bar_dat_use[salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$school_type == 'Middle School', 'fv_pre']) -->
+<!-- #### IRR -->
 
-<!-- sd(salad_bar_dat_use[salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$school_type == 'Middle School', 'fv_pre']) -->
+<!-- ```{r fv_pre_irr, echo=FALSE, asis = TRUE} -->
+<!-- as.matrix(exp(fv_served_sum$coef_table[ ,1]), nrow = 10) -->
 <!-- ``` -->
 
 <!-- \FloatBarrier -->
 
-<!-- ```{r fv_pre_MS_mod, echo=FALSE} -->
-<!-- fv_served_MS_sum -->
+<!-- #### OR -->
+
+<!-- ```{r fv_pre_or, echo=FALSE} -->
+<!-- as.matrix(exp(fv_served_sum$coef_table_zi[ ,1]), nrow = 10) -->
 <!-- ``` -->
 
 <!-- \FloatBarrier -->
 <!-- \clearpage -->
 
-<!-- ### High School -->
+<!-- ### Rurality x School Level -->
 
-<!-- ```{r fv_pre_HS_plot, echo=FALSE, include = TRUE} -->
-<!-- hist(salad_bar_dat_use[salad_bar_dat_use['fv_selected'] == 'Y' & salad_bar_dat_use['school_type'] == 'High School', 'fv_pre'], main = 'Histogram of Fruits/Vegetables Selected, g', xlab = 'Fruit/Vegetables, g') -->
+<!-- ```{r fv_pre_int_mod, echo=FALSE} -->
+<!-- fv_served_int_sum -->
 <!-- ``` -->
 
 <!-- \FloatBarrier -->
 
-<!-- ```{r fv_pre_HS_mean, echo=FALSE} -->
-<!-- mean(salad_bar_dat_use[salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$school_type == 'High School', 'fv_pre']) -->
+<!-- #### IRR -->
 
-<!-- sd(salad_bar_dat_use[alad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$school_type == 'High School', 'fv_pre']) -->
+<!-- ```{r fv_pre_int_irr, echo=FALSE, asis = TRUE} -->
+<!-- as.matrix(exp(fv_served_int_sum$coef_table[ ,1]), nrow = 16) -->
 <!-- ``` -->
-
 
 <!-- \FloatBarrier -->
 
-<!-- ```{r fv_pre_HS_mod, echo=FALSE} -->
-<!-- fv_served_HS_sum -->
+<!-- #### OR -->
+
+<!-- ```{r fv_pre_int_or, echo=FALSE} -->
+<!-- as.matrix(exp(fv_served_int_sum$coef_table_zi[ ,1]), nrow = 16) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- ### Rurality x Gender -->
+
+<!-- ```{r fv_pre_gender_mod, echo=FALSE} -->
+<!-- fv_served_gender_sum -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### Count Model Marginal Means -->
+<!-- ```{r fv_pre_gender_fix_emm, echo=FALSE, asis = TRUE} -->
+<!-- fv_served_gender_fixed_emm -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### IRR -->
+
+<!-- ```{r fv_pre_gender_irr, echo=FALSE, asis = TRUE} -->
+<!-- as.matrix(exp(fv_served_gender_sum$coef_table[ ,1]), nrow = 12) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### OR -->
+
+<!-- ```{r fv_pre_gender_or, echo=FALSE} -->
+<!-- as.matrix(exp(fv_served_gender_sum$coef_table_zi[ ,1]), nrow = 12) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- ### Rurality x Eating Duration -->
+
+<!-- ```{r fv_pre_tte_mod, echo=FALSE} -->
+<!-- fv_served_tte_sum -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### IRR -->
+
+<!-- ```{r fv_pre_tte_irr, echo=FALSE, asis = TRUE} -->
+<!-- as.matrix(exp(fv_served_tte_sum$coef_table[ ,1]), nrow = 13) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### Zero Model Marginal Slopes -->
+<!-- ```{r fv_pre_tte_zi_emt, echo=FALSE, asis = TRUE} -->
+<!-- fv_served_tte_zi_emt -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### OR -->
+
+<!-- ```{r fv_pre_tte_or, echo=FALSE} -->
+<!-- as.matrix(exp(fv_served_tte_sum$coef_table_zi[ ,1]), nrow = 13) -->
 <!-- ``` -->
 
 <!-- \FloatBarrier -->
@@ -529,143 +663,248 @@ as.matrix(exp(fv_prop_waste_grade_sum$coef_table_zi[ ,1]), nrow = 9)
 
 <!-- ## Fruit/Vegetable Consumed -->
 
-<!-- ### Elementary School -->
-
-<!-- ```{r fv_consumed_ES_plot, echo=FALSE, include = TRUE} -->
-<!-- hist(salad_bar_dat_use[salad_bar_dat_use['fv_selected'] == 'Y' & salad_bar_dat_use['school_type'] == 'Elementary', 'fv_consumed'], main = 'Histogram of Fruits/Vegetables Consumed, g', xlab = 'Fruit/Vegetables, g') -->
+<!-- ```{r fv_consumed_plot, echo=FALSE, include = TRUE} -->
+<!-- hist(salad_bar_dat_use[salad_bar_dat_use[['fv_selected']] == 'Y', 'fv_consumed']) -->
 <!-- ``` -->
 
 <!-- \FloatBarrier -->
 
-<!-- ```{r fv_consumed_ES_mean, echo=FALSE} -->
-<!-- mean(salad_bar_dat_use[salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$fv_consumed > 0 & salad_bar_dat_use$school_type == 'Elementary', 'fv_consumed']) -->
+<!-- -mean and sd for participants that selected F/V and consumed > 0 g F/V -->
 
-<!-- sd(salad_bar_dat_use[salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$fv_consumed > 0 & salad_bar_dat_use$school_type == 'Elementary', 'fv_consumed']) -->
+<!-- ```{r fv_consumed_mean, echo=FALSE, results='asis'} -->
+<!-- mean(salad_bar_dat_use[salad_bar_dat_use[['fv_consumed']] > 0, 'fv_consumed'], na.rm = TRUE) -->
+<!-- sd(salad_bar_dat_use[salad_bar_dat_use[['fv_consumed']] > 0, 'fv_consumed'], na.rm = TRUE) -->
+<!-- ``` -->
+
+
+<!-- \FloatBarrier -->
+
+<!-- ### Overall Model -->
+
+<!-- ```{r fv_consumed_mod, echo=FALSE} -->
+<!-- fv_consumed_sum -->
 <!-- ``` -->
 
 <!-- \FloatBarrier -->
 
-<!-- ```{r fv_consumed_ES_mod, echo=FALSE} -->
-<!-- round(fv_prop_waste_ES_sum$coefficients, 3) -->
+<!-- #### IRR -->
+
+<!-- ```{r fv_consumed_irr, echo=FALSE, asis = TRUE} -->
+<!-- as.matrix(exp(fv_consumed_sum$coef_table[ ,1]), nrow = 10) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### OR -->
+
+<!-- ```{r fv_consumed_or, echo=FALSE} -->
+<!-- as.matrix(exp(fv_consumed_sum$coef_table_zi[ ,1]), nrow = 10) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- ### Rurality x School Level -->
+
+<!-- ```{r fv_consumed_int_mod, echo=FALSE} -->
+<!-- fv_consumed_int_sum -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### IRR -->
+
+<!-- ```{r fv_consumed_int_irr, echo=FALSE, asis = TRUE} -->
+<!-- as.matrix(exp(fv_consumed_int_sum$coef_table[ ,1]), nrow = 16) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### OR -->
+
+<!-- ```{r fv_consumed_int_or, echo=FALSE} -->
+<!-- as.matrix(exp(fv_consumed_int_sum$coef_table_zi[ ,1]), nrow = 16) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- ### Rurality x Gender -->
+
+<!-- ```{r fv_consumed_gender_mod, echo=FALSE} -->
+<!-- fv_consumed_gender_sum -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### IRR -->
+
+<!-- ```{r fv_consumed_gender_irr, echo=FALSE, asis = TRUE} -->
+<!-- as.matrix(exp(fv_consumed_gender_sum$coef_table[ ,1]), nrow = 12) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### OR -->
+
+<!-- ```{r fv_consumed_gender_or, echo=FALSE} -->
+<!-- as.matrix(exp(fv_consumed_gender_sum$coef_table_zi[ ,1]), nrow = 12) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- ### Rurality x Eating Duration -->
+
+<!-- ```{r fv_consumed_tte_mod, echo=FALSE} -->
+<!-- fv_consumed_tte_sum -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### IRR -->
+
+<!-- ```{r fv_consumed_tte_irr, echo=FALSE, asis = TRUE} -->
+<!-- as.matrix(exp(fv_consumed_tte_sum$coef_table[ ,1]), nrow = 13) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### Zero Model Marginal Slopes -->
+<!-- ```{r fv_consumed_tte_zi_emt, echo=FALSE, asis = TRUE} -->
+<!-- fv_consumed_tte_zi_emt -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### OR -->
+
+<!-- ```{r fv_consumed_tte_or, echo=FALSE} -->
+<!-- as.matrix(exp(fv_consumed_tte_sum$coef_table_zi[ ,1]), nrow = 13) -->
 <!-- ``` -->
 
 <!-- \FloatBarrier -->
 <!-- \clearpage -->
 
-<!-- ### Middle School -->
-
-<!-- ```{r fv_consumed_MS_plot, echo=FALSE, include = TRUE} -->
-<!-- hist(salad_bar_dat_use[salad_bar_dat_use['fv_selected'] == 'Y' & salad_bar_dat_use['school_type'] == 'Middle School', 'fv_consumed'], main = 'Histogram of Fruits/Vegetables Consumed, g', xlab = 'Fruit/Vegetables, g') -->
-<!-- ``` -->
-
-<!-- \FloatBarrier -->
-
-<!-- ```{r fv_consumed_MS_mean, echo=FALSE} -->
-<!-- mean(salad_bar_dat_use[salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$fv_consumed > 0 & salad_bar_dat_use$school_type == 'Middle School', 'fv_consumed']) -->
-
-<!-- sd(salad_bar_dat_use[salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$fv_consumed > 0 & salad_bar_dat_use$school_type == 'Middle School', 'fv_consumed']) -->
-<!-- ``` -->
-
-<!-- \FloatBarrier -->
-
-<!-- ```{r fv_consumed_MS_mod, echo=FALSE} -->
-<!-- fv_consumed_MS_sum -->
-<!-- ``` -->
-
-<!-- \FloatBarrier -->
-<!-- \clearpage -->
-
-<!-- ### High School -->
-
-<!-- ```{r fv_consumed_HS_plot, echo=FALSE, include = TRUE} -->
-<!-- hist(salad_bar_dat_use[salad_bar_dat_use['fv_selected'] == 'Y' & salad_bar_dat_use['school_type'] == 'High School', 'fv_consumed'], main = 'Histogram of Fruits/Vegetables Consumed, g', xlab = 'Fruit/Vegetables, g') -->
-<!-- ``` -->
-
-<!-- \FloatBarrier -->
-
-<!-- ```{r fv_consumed_HS_mean, echo=FALSE} -->
-<!-- mean(salad_bar_dat_use[salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$fv_consumed > 0 & salad_bar_dat_use$school_type == 'High School', 'fv_consumed']) -->
-
-<!-- sd(salad_bar_dat_use[alad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$fv_consumed > 0 & salad_bar_dat_use$school_type == 'High School', 'fv_consumed']) -->
-<!-- ``` -->
-
-
-<!-- \FloatBarrier -->
-
-<!-- ```{r fv_consumed_HS_mod, echo=FALSE} -->
-<!-- fv_consumed_HS_sum -->
-<!-- ``` -->
-
-<!-- \FloatBarrier -->
-<!-- \clearpage -->
 <!-- ## Fruit/Vegetable Proportion Waste -->
 
-<!-- ### Elementary School -->
 
-<!-- ```{r fv_prop_waste_ES_plot, echo=FALSE, include = TRUE} -->
-<!-- hist(salad_bar_dat_use[salad_bar_dat_use['fv_selected'] == 'Y' & salad_bar_dat_use['school_type'] == 'Elementary', 'fv_prop_waste'], main = 'Histogram of Percent Fruits/Vegetables Waste, %', xlab = 'Fruit/Vegetables, %') -->
+
+<!-- ```{r fv_prop_waste_plot, echo=FALSE, include = TRUE} -->
+<!-- hist(salad_bar_dat_use[salad_bar_dat_use[['fv_selected']] == 'Y', 'fv_prop_waste'], main = 'Histogram of Percent Fruits/Vegetables Waste, %', xlab = 'Fruit/Vegetables, %') -->
 <!-- ``` -->
 
 <!-- \FloatBarrier -->
 
-<!-- ```{r fv_prop_waste_ES_mean, echo=FALSE} -->
-<!-- mean(salad_bar_dat_use[salad_bar_dat_use$fv_prop_waste < 100 & salad_bar_dat_use$fv_prop_waste > 0 & salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$school_type == 'Elementary', 'fv_prop_waste']) -->
+<!-- -mean and sd for participants that selected F/V and consumed > 0 g F/V -->
 
-<!-- sd(salad_bar_dat_use[salad_bar_dat_use$fv_prop_waste < 100 & salad_bar_dat_use$fv_prop_waste > 0 & salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$school_type == 'Elementary', 'fv_prop_waste']) -->
+<!-- ```{r fv_prop_waste_mean, echo=FALSE} -->
+<!-- mean(salad_bar_dat_use[salad_bar_dat_use$fv_prop_waste < 100 & salad_bar_dat_use$fv_prop_waste > 0 & salad_bar_dat_use$fv_selected == 'Y', 'fv_prop_waste']) -->
+
+<!-- sd(salad_bar_dat_use[salad_bar_dat_use$fv_prop_waste < 100 & salad_bar_dat_use$fv_prop_waste > 0 & salad_bar_dat_use$fv_selected == 'Y', 'fv_prop_waste']) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+<!-- ### Interaction Model -->
+
+<!-- ```{r fv_prop_waste_int_mod, echo=FALSE} -->
+<!-- fv_prop_waste_int_sum -->
 <!-- ``` -->
 
 <!-- \FloatBarrier -->
 
-<!-- ```{r fv_prop_waste_ES_mod, echo=FALSE} -->
-<!-- fv_prop_waste_ES_sum -->
+<!-- #### IRR -->
+
+<!-- ```{r fv_prop_waste_int_irr, echo=FALSE, asis = TRUE} -->
+<!-- as.matrix(exp(fv_prop_waste_int_sum$coef_table[ ,1]), nrow = 9) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### OR -->
+
+<!-- ```{r fv_prop_waste_int_or, echo=FALSE} -->
+<!-- as.matrix(exp(fv_prop_waste_int_sum$coef_table_zi[ ,1]), nrow = 9) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- ### Overall Model -->
+
+<!-- ```{r fv_prop_waste_mod, echo=FALSE} -->
+<!-- fv_prop_waste_sum -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### IRR -->
+
+<!-- ```{r fv_prop_waste_irr, echo=FALSE, asis = TRUE} -->
+<!-- as.matrix(exp(fv_prop_waste_sum$coef_table[ ,1]), nrow = 9) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### OR -->
+
+<!-- ```{r fv_prop_waste_or, echo=FALSE} -->
+<!-- as.matrix(exp(fv_prop_waste_sum$coef_table_zi[ ,1]), nrow = 9) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+<!-- \clearpage -->
+
+<!-- ### Rurality x Gender -->
+
+<!-- ```{r fv_prop_waste_gender_mod, echo=FALSE} -->
+<!-- fv_prop_waste_gender_sum -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### IRR -->
+
+<!-- ```{r fv_prop_waste_gender_irr, echo=FALSE, asis = TRUE} -->
+<!-- as.matrix(exp(fv_prop_waste_gender_sum$coef_table[ ,1]), nrow = 9) -->
+<!-- ``` -->
+
+<!-- \FloatBarrier -->
+
+<!-- #### OR -->
+
+<!-- ```{r fv_prop_waste_gender_or, echo=FALSE} -->
+<!-- as.matrix(exp(fv_prop_waste_gender_sum$coef_table_zi[ ,1]), nrow = 9) -->
 <!-- ``` -->
 
 <!-- \FloatBarrier -->
 <!-- \clearpage -->
 
-<!-- ### Middle School -->
+<!-- ### Rurality x Eating Duration -->
 
-<!-- ```{r fv_prop_waste_MS_plot, echo=FALSE, include = TRUE} -->
-<!-- hist(salad_bar_dat_use[salad_bar_dat_use['fv_selected'] == 'Y' & salad_bar_dat_use['school_type'] == 'Middle School', 'fv_prop_waste'], main = 'Histogram of Percent Fruits/Vegetables Waste, %', xlab = 'Fruit/Vegetables, %') -->
+<!-- ```{r fv_prop_waste_tte_mod, echo=FALSE} -->
+<!-- fv_prop_waste_tte_sum -->
 <!-- ``` -->
 
 <!-- \FloatBarrier -->
 
-<!-- ```{r fv_prop_waste_MS_mean, echo=FALSE} -->
-<!-- mean(salad_bar_dat_use[salad_bar_dat_use$fv_prop_waste < 100 & salad_bar_dat_use$fv_prop_waste > 0 & salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$school_type == 'Middle School', 'fv_prop_waste']) -->
-
-<!-- sd(salad_bar_dat_use[salad_bar_dat_use$fv_prop_waste < 100 & salad_bar_dat_use$fv_prop_waste > 0 & salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$school_type == 'Middle School', 'fv_prop_waste']) -->
+<!-- #### Count Model Marginal Slopes -->
+<!-- ```{r fv_prop_waste_tte_fixed_emm, echo=FALSE, asis = TRUE} -->
+<!-- fv_prop_waste_tte_fixed_emm -->
 <!-- ``` -->
 
 <!-- \FloatBarrier -->
 
-<!-- ```{r fv_prop_waste_MS_mod, echo=FALSE} -->
-<!-- fv_prop_waste_MS_sum -->
-<!-- ``` -->
+<!-- #### IRR -->
 
-<!-- \FloatBarrier -->
-<!-- \clearpage -->
-
-<!-- ### High School -->
-
-<!-- ```{r fv_prop_waste_HS_plot, echo=FALSE, include = TRUE} -->
-<!-- hist(salad_bar_dat_use[salad_bar_dat_use['fv_selected'] == 'Y' & salad_bar_dat_use['school_type'] == 'High School', 'fv_prop_waste'], main = 'Histogram of Percent Fruits/Vegetables Waste, %', xlab = 'Fruit/Vegetables, %') -->
+<!-- ```{r fv_prop_waste_tte_irr, echo=FALSE, asis = TRUE} -->
+<!-- as.matrix(exp(fv_prop_waste_tte_sum$coef_table[ ,1]), nrow = 13) -->
 <!-- ``` -->
 
 <!-- \FloatBarrier -->
 
-<!-- ```{r fv_prop_waste_HS_mean, echo=FALSE} -->
-<!-- mean(salad_bar_dat_use[salad_bar_dat_use$fv_prop_waste < 100 & salad_bar_dat_use$fv_prop_waste > 0 & salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$school_type == 'High School', 'fv_prop_waste']) -->
+<!-- #### OR -->
 
-<!-- sd(salad_bar_dat_use[salad_bar_dat_use$fv_prop_waste < 100 & salad_bar_dat_use$fv_prop_waste > 0 & salad_bar_dat_use$fv_selected == 'Y' & salad_bar_dat_use$school_type == 'High School', 'fv_prop_waste']) -->
-<!-- ``` -->
-
-
-<!-- \FloatBarrier -->
-
-<!-- ```{r fv_prop_waste_HS_mod, echo=FALSE} -->
-<!-- fv_prop_waste_HS_sum -->
+<!-- ```{r fv_prop_waste_tte_or, echo=FALSE} -->
+<!-- as.matrix(exp(fv_prop_waste_tte_sum$coef_table_zi[ ,1]), nrow = 13) -->
 <!-- ``` -->
 
 <!-- \FloatBarrier -->
 <!-- \clearpage -->
+

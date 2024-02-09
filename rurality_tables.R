@@ -26,7 +26,8 @@
 
 ## participant table
 salad_bar_dat_use$school_type <- factor(salad_bar_dat_use$school_type, levels = c('Elementary', 'Middle School', 'High School'))
-partab_data <- salad_bar_dat_use[c(55:57, 63, 60, 61, 64, 65, 67)]
+
+partab_data <- salad_bar_dat_use[c(55:57, 63, 60, 61, 64, 65, 69)]
 
 partab_all <-
   tbl_summary(
@@ -40,21 +41,21 @@ partab_all <-
   modify_header(all_stat_cols() ~ "**Overall**") %>%
   add_n()
 
-partab_select_data <- salad_bar_dat_use[salad_bar_dat_use[['fv_selected']] == 'Y', c(16, 69, 66, 18, 17, 62)]
+partab_select_data <- salad_bar_dat_use[salad_bar_dat_use[['fv_selected']] == 'Y', c(75, 16, 72, 73, 18, 17, 62)]
 
 partab_select <-
   tbl_summary(
     data = partab_select_data,
-    value = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g", time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
-    label = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g", time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
-    type = list(fv_consumed_cat ~ "categorical", fv_pre ~ "continuous", time_to_eat ~ "continuous", fv_consumed ~ 'continuous', fv_post ~ 'continuous', fv_prop_waste ~ 'continuous'),
+    value = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g", time_line ~ "Time in Line", time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
+    label = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g", time_line ~ "Time in Line", time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
+    type = list(fv_consumed_cat ~ "categorical", fv_pre ~ "continuous", time_line ~ "continuous", time_to_eat ~ "continuous", fv_consumed ~ 'continuous', fv_post ~ 'continuous', fv_prop_waste ~ 'continuous'),
     statistic = all_continuous() ~ c("{mean} ({sd})"),
     missing = "ifany",
     digits = all_continuous() ~ 1) %>%
   modify_header(all_stat_cols() ~ "**Overall**") %>%
   add_n()
 
-partab_school_data <- salad_bar_dat_use[c(4, 55:57, 63, 60, 61, 64, 65, 67)]
+partab_school_data <- salad_bar_dat_use[c(4, 55:57, 63, 60, 61, 64, 65, 69)]
 
 partab_all_school <-
   tbl_summary(
@@ -70,16 +71,16 @@ partab_all_school <-
   add_n() %>%
   add_p()
 
-partab_select_school_data <- salad_bar_dat_use[salad_bar_dat_use[['fv_selected']] == 'Y', c(4, 16, 66, 69, 18, 17, 62)]
+partab_select_school_data <- salad_bar_dat_use[salad_bar_dat_use[['fv_selected']] == 'Y', c(4, 75, 16, 72, 73, 18, 17, 62)]
 
 
 partab_select_school <-
   tbl_summary(
     data = partab_select_school_data,
     by = 'school_type',
-    value = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g",  time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
-    label = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g", time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
-    type = list(fv_consumed_cat ~ "categorical", fv_pre ~ "continuous", time_to_eat ~ "continuous", fv_consumed ~ 'continuous', fv_post ~ 'continuous', fv_prop_waste ~ 'continuous'),
+    value = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g",  time_line ~ "Time in Line", time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
+    label = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g", time_line ~ "Time in Line", time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
+    type = list(fv_consumed_cat ~ "categorical", fv_pre ~ "continuous", time_line ~ "continuous", time_to_eat ~ "continuous", fv_consumed ~ 'continuous', fv_post ~ 'continuous', fv_prop_waste ~ 'continuous'),
     statistic = all_continuous() ~ c("{mean} ({sd})"),
     missing = "ifany",
     digits = all_continuous() ~ 1) %>%
@@ -104,9 +105,56 @@ partab_select_merge <-
 overall_table <-
   tbl_stack(list(partab_merge, partab_select_merge), group_header = c("", ""))
 
-## by rural ####
+## by rural - 2 cat ####
 
-partab_rural_data <- salad_bar_dat_use[c(64, 55:57, 63, 60:61, 65, 67)]
+partab_rural2_data <- salad_bar_dat_use[c(76, 55:57, 63, 60, 61, 65, 69)]
+
+partab_rural2 <-
+  tbl_summary(
+    data = partab_rural2_data,
+    by = 'rurality2',
+    value = list(gender ~ "Gender", grade ~ "Grade", age ~ "Age, yr", race_ethnicity ~ "Race/Ethnicity", paid_free_reduced ~ "Free-Reduced Lunch", fv_selected ~ "F/V Selected", p_rural ~ 'Percent Rural, county', lunch_dur ~ 'Lunch Period'),
+    label = list(gender ~ "Gender", grade ~ "Grade", age ~ "Age, yr", race_ethnicity ~ "Race/Ethnicity", paid_free_reduced ~ "Free-Reduced Lunch", fv_selected ~ "F/V Selected", p_rural ~ 'Percent Rural, county', lunch_dur ~ 'Lunch Period'),
+    type = list(gender ~ "categorical", grade ~ "continuous", age ~ "continuous", race_ethnicity ~ "categorical", paid_free_reduced ~ "categorical", fv_selected ~ "categorical", p_rural ~ 'continuous', lunch_dur ~ 'continuous'),
+    statistic = all_continuous() ~ c("{mean} ({sd})"),
+    missing = "ifany",
+    digits = all_continuous() ~ 1) %>%
+  add_p()
+
+partab_select_rural2_data <- salad_bar_dat_use[salad_bar_dat_use[['fv_selected']] == 'Y', c(76, 75, 16, 72, 73, 18, 17, 62)]
+
+partab_select_rural2 <-
+  tbl_summary(
+    data = partab_select_rural2_data,
+    by = 'rurality2',
+    value = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g", time_line ~ "Time in Line", time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
+    label = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g", time_line ~ "Time in Line", time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
+    type = list(fv_consumed_cat ~ "categorical", fv_pre ~ "continuous", time_line ~ "continuous", time_to_eat ~ "continuous", fv_consumed ~ 'continuous', fv_post ~ 'continuous', fv_prop_waste ~ 'continuous'),
+    statistic = all_continuous() ~ c("{mean} ({sd})"),
+    missing = "ifany",
+    digits = all_continuous() ~ 1) %>%
+  modify_header(all_stat_cols() ~ "**{level}**") %>%
+  add_n() %>%
+  add_p()
+
+partab_merge_rural2 <-
+  tbl_merge(
+    tbls = list(partab_all, partab_rural2),
+    tab_spanner = c("**Full Sample**", "**Urban vs Rural**")
+  )
+
+partab_select_merge_rural2 <-
+  tbl_merge(
+    tbls = list(partab_select, partab_select_rural2),
+    tab_spanner = c("**Full Sample**", "**Urban vs Rural**")
+  )
+
+overall_table_rural2 <-
+  tbl_stack(list(partab_merge_rural2, partab_select_merge_rural2), group_header = c("", ""))
+
+## by rural - 3 cat ####
+
+partab_rural_data <- salad_bar_dat_use[c(64, 55:57, 63, 60, 61, 65, 69)]
 
 partab_rural <-
   tbl_summary(
@@ -120,15 +168,15 @@ partab_rural <-
     digits = all_continuous() ~ 1) %>%
 add_p()
 
-partab_select_rural_data <- salad_bar_dat_use[salad_bar_dat_use[['fv_selected']] == 'Y', c(64, 16, 66, 69, 18, 17, 62)]
+partab_select_rural_data <- salad_bar_dat_use[salad_bar_dat_use[['fv_selected']] == 'Y', c(64, 75, 16, 72, 73, 18, 17, 62)]
 
 partab_select_rural <-
   tbl_summary(
     data = partab_select_rural_data,
     by = 'rurality',
-    value = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g", time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
-    label = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g", time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
-    type = list(fv_consumed_cat ~ "categorical", fv_pre ~ "continuous", time_to_eat ~ "continuous", fv_consumed ~ 'continuous', fv_post ~ 'continuous', fv_prop_waste ~ 'continuous'),
+    value = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g", time_line ~ "Time in Line", time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
+    label = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g", time_line ~ "Time in Line", time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
+    type = list(fv_consumed_cat ~ "categorical", fv_pre ~ "continuous", time_line ~ "continuous", time_to_eat ~ "continuous", fv_consumed ~ 'continuous', fv_post ~ 'continuous', fv_prop_waste ~ 'continuous'),
     statistic = all_continuous() ~ c("{mean} ({sd})"),
     missing = "ifany",
     digits = all_continuous() ~ 1) %>%

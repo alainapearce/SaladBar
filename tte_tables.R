@@ -69,7 +69,7 @@ partab_all_school <-
     digits = all_continuous() ~ 1) %>%
   modify_header(all_stat_cols() ~ "**{level}**") %>%
   add_n() %>%
-  add_p()
+  add_p(pvalue_fun = function(x) style_number(x, digits = 3))
 
 partab_select_school_data <- salad_bar_dat_use[salad_bar_dat_use[['fv_selected']] == 'Y', c(4, 75, 16, 69, 72, 73, 18, 17, 62)]
 
@@ -86,7 +86,7 @@ partab_select_school <-
     digits = all_continuous() ~ 1) %>%
   modify_header(all_stat_cols() ~ "**{level}**") %>%
   add_n() %>%
-  add_p()
+  add_p(pvalue_fun = function(x) style_number(x, digits = 3))
 
 
 partab_merge <-
@@ -120,13 +120,42 @@ partab_all_byselect <-
     digits = all_continuous() ~ 1) %>%
   modify_header(all_stat_cols() ~ "**{level}**") %>%
   add_n() %>%
-  add_p()
+  add_p(pvalue_fun = function(x) style_number(x, digits = 3))
 
 
 ## Complete vs Missing for TTE (after ensuring all other covars are present) ####
-salad_bar_dat_use_includemissing <- salad_bar_dat[!is.na(salad_bar_dat[['fv_pre']]) & !is.na(salad_bar_dat[['fv_post']] & !is.na(salad_bar_dat[['gender']]) & !is.na(salad_bar_dat[["race_ethnicity"]]) & !is.na(salad_bar_dat[["grade"]]) & !is.na(salad_bar_dat[["paid_free_reduced"]]) & !is.na(salad_bar_dat[["lunch_dur"]])), ]
+salad_bar_dat_use_includemissing <- salad_bar_dat[!is.na(salad_bar_dat[['fv_pre']]) & !is.na(salad_bar_dat[['fv_post']]) & !is.na(salad_bar_dat[['gender']]) & !is.na(salad_bar_dat[["race_ethnicity"]]) & !is.na(salad_bar_dat[["grade"]]) & !is.na(salad_bar_dat[["paid_free_reduced"]]) & !is.na(salad_bar_dat[["lunch_dur"]]), ]
 
+# set tte < 0 as missing
+salad_bar_dat_use_includemissing[['tte_dat']] <- ifelse(is.na(salad_bar_dat_use_includemissing[['time_to_eat']]) | salad_bar_dat_use_includemissing[['time_to_eat']] < 0, 'Missing', as.character(salad_bar_dat_use_includemissing[['tte_dat']]))
 
+partab_tte_alldata <- salad_bar_dat_use_includemissing[c(55:57, 63, 60, 61, 69)]
+
+partab_alldata_tte <-
+  tbl_summary(
+    data = partab_tte_alldata,
+    value = list(gender ~ "Gender", grade ~ "Grade", age ~ "Age, yr", race_ethnicity ~ 'Race/Ethnicity', paid_free_reduced ~ "Free-Reduced Lunch", fv_selected ~ "F/V Selected", lunch_dur ~ "Lunch duration"),
+    label = list(gender ~ "Gender", grade ~ "Grade", age ~ "Age, yr", race_ethnicity ~ 'Race/Ethnicity', paid_free_reduced ~ "Free-Reduced Lunch", fv_selected ~ "F/V Selected", lunch_dur ~ "Lunch duration"),
+    type = list(gender ~ "categorical", grade ~ "continuous", age ~ "continuous", race_ethnicity ~ 'categorical', paid_free_reduced ~ "categorical", fv_selected ~ "categorical", lunch_dur ~ "continuous"),
+    statistic = all_continuous() ~ c("{mean} ({sd})"),
+    missing = "ifany",
+    digits = all_continuous() ~ 1) %>%
+  add_n()
+
+partab_intake_tte_alldata <- salad_bar_dat_use_includemissing[salad_bar_dat_use_includemissing[['fv_selected']] == 'Y', c(75, 16, 69, 72, 73, 18, 17, 62)]
+
+partab_intake_alldata_tte <-
+  tbl_summary(
+    data = partab_intake_tte_alldata,
+    value = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g", lunch_dur ~ "Lunch Period", time_line ~ "Time in Line", time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
+    label = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g", lunch_dur ~ "Lunch Period", time_line ~ "Time in Line", time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
+    type = list(fv_consumed_cat ~ "categorical", fv_pre ~ "continuous", lunch_dur ~ 'continuous', time_line ~ "continuous", time_to_eat ~ "continuous", fv_consumed ~ 'continuous', fv_post ~ 'continuous', fv_prop_waste ~ 'continuous'),
+    statistic = all_continuous() ~ c("{mean} ({sd})"),
+    missing = "ifany",
+    digits = all_continuous() ~ 1) %>%
+  add_n()
+
+# by TTE status
 partab_tte_data <- salad_bar_dat_use_includemissing[c(74, 55:57, 63, 60, 61, 69)]
 
 partab_all_tte <-
@@ -141,33 +170,34 @@ partab_all_tte <-
     digits = all_continuous() ~ 1) %>%
   modify_header(all_stat_cols() ~ "**{level}**") %>%
   add_n() %>%
-  add_p()
+  add_p(pvalue_fun = function(x) style_number(x, digits = 3))
 
-partab_intake_tte_data <- salad_bar_dat_use_includemissing[salad_bar_dat_use_includemissing[['fv_selected']] == 'Y', c(74, 16, 18, 17, 62, 69)]
+partab_intake_tte_data <- salad_bar_dat_use_includemissing[salad_bar_dat_use_includemissing[['fv_selected']] == 'Y', c(74, 75, 16, 69, 72, 73, 18, 17, 62)]
 
 partab_intake_tte <-
   tbl_summary(
     data = partab_intake_tte_data,
     by = 'tte_dat',
-    value = list(fv_pre ~ "F/V Self-Served, g", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %', lunch_dur ~ "Lunch Period"),
-    label = list(fv_pre ~ "F/V Self-Served, g", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %', lunch_dur ~ "Lunch Period"),
-    type = list(fv_pre ~ "continuous", fv_consumed ~ 'continuous', fv_post ~ 'continuous', fv_prop_waste ~ 'continuous', lunch_dur ~ 'continuous'),
+    value = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g", lunch_dur ~ "Lunch Period", time_line ~ "Time in Line", time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
+    label = list(fv_consumed_cat ~ "F/V Consumed Any", fv_pre ~ "F/V Self-Served, g", lunch_dur ~ "Lunch Period", time_line ~ "Time in Line", time_to_eat ~ "Eating Duration", fv_consumed ~ 'F/V Consumed, g', fv_post ~ 'F/V Waste, g', fv_prop_waste ~ 'F/V Percent Waste (post/pre), %'),
+    type = list(fv_consumed_cat ~ "categorical", fv_pre ~ "continuous", lunch_dur ~ 'continuous', time_line ~ "continuous", time_to_eat ~ "continuous", fv_consumed ~ 'continuous', fv_post ~ 'continuous', fv_prop_waste ~ 'continuous'),
     statistic = all_continuous() ~ c("{mean} ({sd})"),
     missing = "ifany",
     digits = all_continuous() ~ 1) %>%
   modify_header(all_stat_cols() ~ "**{level}**") %>%
   add_n() %>%
-  add_p()
+  add_p(pvalue_fun = function(x) style_number(x, digits = 3))
 
+# merge 
 partab_merge_tte <-
   tbl_merge(
-    tbls = list(partab_all, partab_all_tte),
+    tbls = list(partab_alldata_tte, partab_all_tte),
     tab_spanner = c("**Full Sample**", "**Time to Eat Data**")
   )
 
 partab_intake_merge_tte <-
   tbl_merge(
-    tbls = list(partab_select, partab_intake_tte),
+    tbls = list(partab_intake_alldata_tte, partab_intake_tte),
     tab_spanner = c("**Full Sample**", "**Time to Eat Data**")
   )
 
